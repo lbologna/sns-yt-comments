@@ -1,10 +1,208 @@
-<!DOCTYPE html>
 <html>
-<body>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<body id="banner">
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    /**
+     * Sample JavaScript code for youtube.commentThreads.list
+     * See instructions for running APIs Explorer code samples locally:
+     * https://developers.google.com/explorer-help/code-samples#javascript
+     */
+    gapi.load("client")
+    function loadClient() {
+      let snsId = "UC5jvSA87qg0yT1Ya4doCkTQ";
+      let scId = "UC6N1rrcxin_xuMd1SqMWJeg";
+      let pgengId = "UCaYInMAT5L4jxH13gnwHu-Q";
+      gapi.client.setApiKey("");
+      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+          .then(function() { 
+            console.log("GAPI client loaded for API"); 
+            execute(snsId, "1a");
+            execute(scId, "2a");
+            execute(pgengId, "3a");
+          },
+                function(err) { console.error("Error loading GAPI client for API", err); });
+    }
+    // Make sure the client is loaded before calling this method.
+    function execute(chId, divId) {
+      return gapi.client.youtube.commentThreads.list({
+        "part": [
+          "snippet, replies"
+        ],
+        "allThreadsRelatedToChannelId": chId,
+        "prettyPrint": true,
+        "maxResults": 100,
+      })
+          .then(function(response){
+            populate(response, divId);
 
-<h1>My First Heading</h1>
+          })
+    function populate(response, divId){
+              let mainSnSdiv = document.getElementById(divId);
+                  mainSnSdiv.innerHTML = "";
+                  mainSnSdiv.scrollTop = 0;
+                  // Handle the results here (response.result has the parsed body).
+                  let res = JSON.parse(response["body"]);
+                  console.log(res["items"])
+                  res["items"].forEach(element => {
+                    /* container div */
+                    let cdiv = document.createElement("div");
+                    cdiv.classList.add("container");
+                    
+                    /* title row div */
+                    let titleDiv = document.createElement("div");
+                    titleDiv.classList.add("row", "border", "text-wrap");
+                    /* title content div */
+                    let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
+                    console.log(videoID)
+                    let titleContentDiv = document.createElement("div");
+                    titleContentDiv.classList.add("col-12", "border");
+                    let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID +"' target=_blank>Apri in YT</a> - <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
+                    let replies = element["snippet"]["totalReplyCount"];
+                    let repliesText = "<strong>Risposte:</strong> " + replies + " - "
+                    titleDiv.appendChild(titleContentDiv);
+                    cdiv.appendChild(titleDiv);
+                    
+                    /* row div */
+                    let rdiv = document.createElement("div");
+                    rdiv.classList.add("row", "border", "text-wrap");
+                    cdiv.appendChild(rdiv);
+                    /* comment div */
+                    let commentDiv = document.createElement("div");
+                    commentDiv.classList.add("col-10", "text-wrap");
+                    let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
+                    let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
+                    let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
+                   
 
-<p>My first paragraph.</p>
+                    commentDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong><br>" + comment + "<br>" + repliesText + linkToVideo ;
+                    rdiv.appendChild(commentDiv);
+                    /* date div */
+                    let dateDiv = document.createElement("div");
+                    dateDiv.classList.add("col-2", "text-wrap");
+                    let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
+                    rdiv.appendChild(dateDiv);
+                    cdiv.scrollTop = 0;
+                    rdiv.scrollTop = 0;
+                    mainSnSdiv.appendChild(cdiv);
+                    
+                    let currentTime = new Date();
+                    let creationDate = new Date(creationDateString);
 
+                    textToDisplay = timeText(currentTime, creationDate);
+                    //To display the final no. of days (result)
+                    dateDiv.innerHTML = textToDisplay ;
+                  });
+                }
+                
+
+    }
+
+    /* ------------ */
+
+    function timeText(currentTime, creationDate){
+      // To calculate the time difference of two dates
+      var DifferenceInTime = currentTime.getTime() - creationDate.getTime();
+      
+      // To calculate the no. of days between two dates
+      let diffDays = DifferenceInTime / (1000 * 3600 * 24);
+      let diffHours = diffDays * 24;
+      let diffMinutes = diffHours * 60;
+      let timeToDisplay = "";
+      if (diffDays > 1){
+        let displayTime = Math.floor(diffDays);
+        if (displayTime == 1)
+          text = "g"
+        else
+          text = "g"
+          timeToDisplay = displayTime + text;
+      } else if(diffHours > 1 ){
+        let displayTime = Math.floor(diffHours);
+        if (displayTime == 1)
+          text = "h"
+        else
+          text = "h"
+          timeToDisplay = displayTime + text;
+      } else {
+        let displayTime = Math.ceil(diffMinutes);
+        if (displayTime == 1)
+          text = "m"
+        else
+          text = "m"
+          timeToDisplay = displayTime + text;
+      }
+      timeToDisplay = timeToDisplay;
+      return timeToDisplay;
+    }
+
+
+    
+  </script>
+  <div id="banner" class="container sticky-top" style="height:35px; margin:2px">
+    <div class="row" >
+      <div style="border-style: none; border-radius: 5px; background-color:rgb(100, 146, 225)" class="text-center col-10 bg-body-secondary">
+        <strong>SnS Youtube - Ultimi commenti</strong>
+      </div>
+      <button style="padding:0px" onclick="loadClient()" type="button" class="bg-warning col-2 btn btn-sm btn-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
+<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
+</svg>
+        <span class="visually-hidden"></span>
+      </button>
+  </div>
+</div>
+
+<!-- Tab content -->
+<div id="exTab1" class="container">	
+<ul  class="nav nav-tabs mb-3">
+			<li class="nav-link active"><a href="#1a" data-toggle="tab">SnS</a>
+			</li>
+			<li><a class="nav-link " href="#2a" data-toggle="tab">Siate Curiosi</a>
+			</li>
+			<li><a class="nav-link " href="#3a" data-toggle="tab">PG ENG</a>
+			</li>
+		</ul>
+
+			<div class="tab-content clearfix">
+			  <div class="tab-pane active" id="1a">
+          Clicca su
+          <i class="bi bi-arrow-repeat"></i>
+          in alto a destra
+				</div>
+				<div class="tab-pane" id="2a">
+          Clicca su
+          <i class="bi bi-arrow-repeat"></i>
+          in alto a destra
+        				</div>
+        <div class="tab-pane" id="3a">
+          Clicca su
+          <i class="bi bi-arrow-repeat"></i>
+          in alto a destra
+        </div>
+			</div>
+  </div>
+</div>
+<!-- Tab content -->
+
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
+  </div>
 </body>
 </html>
