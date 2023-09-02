@@ -42,10 +42,11 @@
         /* container div */
         let cdiv = document.createElement("div");
         cdiv.classList.add("container", "border");
+        cdiv.setAttribute("style", "padding-top:4px; padding-bottom:4px")
 
         /* author-time row" */
         let authorTimeRow = document.createElement("div");
-        authorTimeRow.classList.add("row", "text-wrap");
+        authorTimeRow.classList.add("row", "text-wrap", "text-break");
         /* author div */
         let authorDiv = document.createElement("div");
         authorDiv.classList.add("col-10")
@@ -68,10 +69,10 @@
 
         /* comment row */
         let commentRow = document.createElement("div");
-        commentRow.classList.add("row", "text-wrap");
+        commentRow.classList.add("row", "text-wrap", "text-break");
         commentRow.setAttribute("style", "margin-top:8px; margin-bottom:8px")
         let commentDiv = document.createElement("div");
-        commentDiv.classList.add("col-12", "text-wrap");
+        commentDiv.classList.add("col-12", "text-wrap", "text-break");
         let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
         commentDiv.innerHTML = comment + "<br>";
         commentRow.appendChild(commentDiv)
@@ -79,9 +80,9 @@
 
         /* footer row */
         let footerRow = document.createElement("div");
-        footerRow.classList.add("row", "text-wrap");
+        footerRow.classList.add("row", "text-wrap", "text-break");
         let footerDiv = document.createElement("div");
-        footerDiv.classList.add("col-12", "text-wrap");
+        footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
         let linkToAppPre = "intent://m.youtube.com/watch?v=";
         let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
