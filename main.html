@@ -7,46 +7,28 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script src="https://apis.google.com/js/api.js"></script>
   <script>
-    /**
-     * Sample JavaScript code for youtube.commentThreads.list
-     * See instructions for running APIs Explorer code samples locally:
-     * https://developers.google.com/explorer-help/code-samples#javascript
-     */
-    gapi.load("client")
-    function loadClient() {
-      let snsId = "UC5jvSA87qg0yT1Ya4doCkTQ";
-      let scId = "UC6N1rrcxin_xuMd1SqMWJeg";
-      let pgengId = "UCaYInMAT5L4jxH13gnwHu-Q";
-      gapi.client.setApiKey("");
-      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-          .then(function() { 
-            console.log("GAPI client loaded for API"); 
-            execute(snsId, "1a");
-            execute(scId, "2a");
-            execute(pgengId, "3a");
-          },
-                function(err) { console.error("Error loading GAPI client for API", err); });
-    }
+    
     // Make sure the client is loaded before calling this method.
-    function execute(chId, divId) {
-      return gapi.client.youtube.commentThreads.list({
-        "part": [
-          "snippet, replies"
-        ],
-        "allThreadsRelatedToChannelId": chId,
-        "prettyPrint": true,
-        "maxResults": 100,
-      })
-          .then(function(response){
-            populate(response, divId);
+    async function execute() {
+      
+    const fetchResSNS = await fetch("https://lucaleonardobologna.it/snscomments/");
+    const jsonDataSNS = await fetchResSNS.json();
+    populate(jsonDataSNS, "1a");
 
-          })
-    function populate(response, divId){
+    const fetchResSC = await fetch("https://lucaleonardobologna.it/sccomments/");
+    const jsonDataSC = await fetchResSC.json();
+    populate(jsonDataSC, "2a");
+
+    const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcomments/");
+    const jsonDataPGENG = await fetchResPGENG.json();
+    populate(jsonDataPGENG, "3a");
+
+
+    function populate(res, divId){
               let mainSnSdiv = document.getElementById(divId);
                   mainSnSdiv.innerHTML = "";
                   mainSnSdiv.scrollTop = 0;
                   // Handle the results here (response.result has the parsed body).
-                  let res = JSON.parse(response["body"]);
                   console.log(res["items"])
                   res["items"].forEach(element => {
                     /* container div */
@@ -78,7 +60,6 @@
                     let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
                     let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
                    
-
                     commentDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong><br>" + comment + "<br>" + repliesText + linkToVideo ;
                     rdiv.appendChild(commentDiv);
                     /* date div */
@@ -141,13 +122,13 @@
 
 
     
-  </script>
+  </script>load
   <div id="banner" class="container sticky-top" style="height:35px; margin:2px">
     <div class="row" >
       <div style="border-style: none; border-radius: 5px; background-color:rgb(100, 146, 225)" class="text-center col-10 bg-body-secondary">
         <strong>SnS Youtube - Ultimi commenti</strong>
       </div>
-      <button style="padding:0px" onclick="loadClient()" type="button" class="bg-warning col-2 btn btn-sm btn-link">
+      <button style="padding:0px" onclick="execute()" type="button" class="bg-warning col-2 btn btn-sm btn-link">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
 <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
 <path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
@@ -194,15 +175,6 @@
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-
-
-
-
-
-
-
-
   </div>
 </body>
 </html>
