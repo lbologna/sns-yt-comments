@@ -35,52 +35,67 @@
         res["items"].forEach(element => {
           /* container div */
           let cdiv = document.createElement("div");
-          cdiv.classList.add("container");
+          cdiv.classList.add("container", "border");
 
-          /* title row div */
-          let titleDiv = document.createElement("div");
-          titleDiv.classList.add("row", "border", "text-wrap");
-
-          /* title content div */
-          let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
-          let titleContentDiv = document.createElement("div");
-          titleContentDiv.classList.add("col-12", "border");
-          
-          titleDiv.appendChild(titleContentDiv);
-          cdiv.appendChild(titleDiv);
-
-          /* row div */
-          let rdiv = document.createElement("div");
-          rdiv.classList.add("row", "border", "text-wrap");
-          cdiv.appendChild(rdiv);
-
-          /* comment div */
-          let commentDiv = document.createElement("div");
-          commentDiv.classList.add("col-10", "text-wrap");
-          let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
+          /* author-time row" */
+          let authorTimeRow = document.createElement("div");
+          authorTimeRow.classList.add("row", "text-wrap");
+          /* author div */
+          let authorDiv = document.createElement("div");
+          authorDiv.classList.add("col-10")
           let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
           let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
-          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank>Apri in YT</a> - <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
-          let replies = element["snippet"]["totalReplyCount"];
-          let repliesText = "<strong>Risposte:</strong> " + replies + " - "
-          commentDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong><br>" + comment + "<br>" + repliesText + linkToVideo;
-          rdiv.appendChild(commentDiv);
-
-          /* date div */
-          let dateDiv = document.createElement("div");
-          dateDiv.classList.add("col-2", "text-wrap");
+          
+          authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''><strong>" + author + "</strong>";
+          /* time div */ 
+          let timeDiv = document.createElement("div");
+          timeDiv.classList.add("col-2")
           let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
-          rdiv.appendChild(dateDiv);
-          cdiv.scrollTop = 0;
-          rdiv.scrollTop = 0;
-          mainSnSdiv.appendChild(cdiv);
-
           let currentTime = new Date();
           let creationDate = new Date(creationDateString);
+          let timeToDisplay = timeText(currentTime, creationDate);
+          timeDiv.innerHTML = timeToDisplay;
+          /* */
+          authorTimeRow.appendChild(authorDiv)
+          authorTimeRow.appendChild(timeDiv)
+          cdiv.appendChild(authorTimeRow)
 
-          textToDisplay = timeText(currentTime, creationDate);
-          //To display the final no. of days (result)
-          dateDiv.innerHTML = textToDisplay;
+          /* comment row */
+          let commentRow = document.createElement("div");
+          commentRow.classList.add("row", "text-wrap");
+          let commentDiv = document.createElement("div");
+          commentDiv.classList.add("col-12", "text-wrap");
+          let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
+          commentDiv.innerHTML = comment + "<br>"; 
+          commentRow.appendChild(commentDiv)
+          cdiv.appendChild(commentRow)
+          // repliesText + linkToVideo;
+
+          /* footer row */
+          let footerRow = document.createElement("div");
+          footerRow.classList.add("row", "text-wrap");
+          let footerDiv = document.createElement("div");
+          footerDiv.classList.add("col-12", "text-wrap");
+          let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
+          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank>Apri in YT</a> - <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
+          let replies = element["snippet"]["totalReplyCount"];
+          let repliesText = "<strong>Risposte:</strong> " + replies + " - " + linkToVideo
+          footerDiv.innerHTML = repliesText
+
+          footerRow.appendChild(footerDiv)
+          cdiv.appendChild(footerRow)
+
+
+          let titleContentDiv = document.createElement("div");
+          titleContentDiv.classList.add("col-12");
+          
+          //titleDiv.appendChild(titleContentDiv);
+          //cdiv.appendChild(titleDiv);
+
+
+          cdiv.scrollTop = 0;
+          mainSnSdiv.appendChild(cdiv);
+
         });
       }
     }
