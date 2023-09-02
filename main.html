@@ -1,5 +1,4 @@
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,7 +45,7 @@
           let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
           let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
           
-          authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''><strong>" + author + "</strong>";
+          authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong>";
           /* time div */ 
           let timeDiv = document.createElement("div");
           timeDiv.classList.add("col-2")
@@ -76,7 +75,10 @@
           let footerDiv = document.createElement("div");
           footerDiv.classList.add("col-12", "text-wrap");
           let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
-          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank>Apri in YT</a> - <a href='#banner'>Torna su<a>";
+          let linkToAppPre = "intent://m.youtube.com/watch?v=";
+          let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
+          let linkToApp = linkToAppPre + videoID + linkToAppPost;
+          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank>Apri in YT</a> - <a href='" + linkToApp + "'>Apri in App</a> -  <a href='#banner'>^<a>";
           let replies = element["snippet"]["totalReplyCount"];
           let repliesText = "<strong>Risposte:</strong> " + replies + " - " + linkToVideo
           footerDiv.innerHTML = repliesText
