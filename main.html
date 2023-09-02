@@ -1,11 +1,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name=”viewport” content=”width=device-width, initial-scale=1″>
   <title>sns-yt-comments</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-</head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  </head>
 
 <body id="banner">
   <script>
@@ -62,6 +63,7 @@
           /* comment row */
           let commentRow = document.createElement("div");
           commentRow.classList.add("row", "text-wrap");
+          commentRow.setAttribute("style", "margin-top:7px; margin-bottom:7px")
           let commentDiv = document.createElement("div");
           commentDiv.classList.add("col-12", "text-wrap");
           let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
@@ -78,7 +80,7 @@
           let linkToAppPre = "intent://m.youtube.com/watch?v=";
           let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
           let linkToApp = linkToAppPre + videoID + linkToAppPost;
-          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank>Apri in YT</a> - <a href='" + linkToApp + "'>Apri in App</a> -  <a href='#banner'>^<a>";
+          let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> url</a> - <a href='" + linkToApp + "'><i class='bi bi-youtube'></i> app</a> -  <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
           let replies = element["snippet"]["totalReplyCount"];
           let repliesText = "<strong>Risposte:</strong> " + replies + " - " + linkToVideo
           footerDiv.innerHTML = repliesText
@@ -154,7 +156,7 @@
       </ul>
       <button onclick="execute()"
         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; margin-top:5px; margin-bottom:5px"
-        type="button" class="container rounded-4 col-12 btn btn-secondary">
+        type="button" class="container rounded-4 btn btn-secondary">
         Aggiorna
       </button>
     </div>
