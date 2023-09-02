@@ -46,10 +46,10 @@
 
         /* author-time row" */
         let authorTimeRow = document.createElement("div");
-        authorTimeRow.classList.add("row", "text-wrap", "text-break");
+        authorTimeRow.classList.add("row");
         /* author div */
         let authorDiv = document.createElement("div");
-        authorDiv.classList.add("col-10")
+        authorDiv.classList.add("col-10", "text-wrap", "text-break")
         let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
         let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
 
@@ -69,7 +69,7 @@
 
         /* comment row */
         let commentRow = document.createElement("div");
-        commentRow.classList.add("row", "text-wrap", "text-break");
+        commentRow.classList.add("row");
         commentRow.setAttribute("style", "margin-top:8px; margin-bottom:8px")
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("col-12", "text-wrap", "text-break");
@@ -80,7 +80,7 @@
 
         /* footer row */
         let footerRow = document.createElement("div");
-        footerRow.classList.add("row", "text-wrap", "text-break");
+        footerRow.classList.add("row");
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
