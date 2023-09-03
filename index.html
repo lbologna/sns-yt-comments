@@ -81,7 +81,6 @@
         /* footer row */
         let footerRow = document.createElement("div");
         footerRow.classList.add("row");
-        footerRow.setAttribute("style", "font-size:4vw")
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
@@ -91,13 +90,13 @@
         let replies = element["snippet"]["totalReplyCount"];
 
         let answersDiv = document.createElement("div");
-        answersDiv.classList.add("col-4")
+        answersDiv.classList.add("col-5")
         let appDiv = document.createElement("div");
         appDiv.classList.add("col-3")
         let urlDiv = document.createElement("div"); 
         urlDiv.classList.add("col-3")       
         let arrowDiv = document.createElement("div");
-        arrowDiv.classList.add("col-2")
+        arrowDiv.classList.add("col-1")
         
         answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> APP</a>"
