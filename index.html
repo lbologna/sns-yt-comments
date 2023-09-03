@@ -87,12 +87,27 @@
         let linkToAppPre = "intent://m.youtube.com/watch?v=";
         let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
         let linkToApp = linkToAppPre + videoID + linkToAppPost;
-        let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> url</a> - <a href='" + linkToApp + "'><i class='bi bi-youtube'></i> app</a> -  <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
         let replies = element["snippet"]["totalReplyCount"];
-        let repliesText = "<strong>Risposte:</strong> " + replies + " - " + linkToVideo
-        footerDiv.innerHTML = repliesText
 
-        footerRow.appendChild(footerDiv)
+        let answersDiv = document.createElement("div");
+        answersDiv.classList.add("col-5")
+        let appDiv = document.createElement("div");
+        appDiv.classList.add("col-3")
+        let urlDiv = document.createElement("div"); 
+        urlDiv.classList.add("col-3")       
+        let arrowDiv = document.createElement("div");
+        arrowDiv.classList.add("col-1")
+        
+        answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
+        appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> APP</a>"
+        urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> URL</a>";
+        arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
+
+        footerRow.appendChild(answersDiv)
+        footerRow.appendChild(appDiv)
+        footerRow.appendChild(urlDiv)
+        footerRow.appendChild(arrowDiv)
+
         cdiv.appendChild(footerRow)
 
         let titleContentDiv = document.createElement("div");
@@ -100,7 +115,6 @@
 
         cdiv.scrollTop = 0;
         mainSnSdiv.appendChild(cdiv);
-
       });
     }
 
@@ -144,8 +158,8 @@
   </script>
 
   <!-- Tab content -->
-  <div id="exTab1" class="" style="margin-top:5px">
-    <div id="" class="sticky-top container ">
+  <div id="exTab1" class="">
+    <div id="" class="sticky-top container" style="margin-top:5px">
       <ul class=" nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist"
         style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
         <li class="nav-item" role="presentation">
