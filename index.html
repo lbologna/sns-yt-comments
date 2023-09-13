@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -28,7 +29,7 @@
 
       const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcomments/");
       const jsonDataPGENG = await fetchResPGENG.json();
-      populate(jsonDataPGENG, "3a");      
+      populate(jsonDataPGENG, "3a");
     }
 
 
@@ -94,11 +95,11 @@
         answersDiv.classList.add("col-4")
         let appDiv = document.createElement("div");
         appDiv.classList.add("col-3")
-        let urlDiv = document.createElement("div"); 
-        urlDiv.classList.add("col-3")       
+        let urlDiv = document.createElement("div");
+        urlDiv.classList.add("col-3")
         let arrowDiv = document.createElement("div");
         arrowDiv.classList.add("col-2")
-        
+
         answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
         urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> Url</a>";
@@ -156,6 +157,9 @@
       timeToDisplay = timeToDisplay;
       return timeToDisplay;
     }
+
+
+
   </script>
 
   <!-- Tab content -->
@@ -182,7 +186,7 @@
         Aggiorna
       </button>
     </div>
-    <div id="" class=" container ">
+    <div id="tab-container" class=" container ">
       <div class="row tab-content clearfix">
         <div class="tab-pane active" id="1a">
         </div>
@@ -210,6 +214,11 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
     integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
     crossorigin="anonymous"></script>
+  <script>    document.querySelectorAll('.nav-link').forEach(linkItem => {
+      linkItem.addEventListener('click', _ => {
+        window.scrollTo(0, 0)
+      })
+    })</script>
 </body>
 
 </html>
