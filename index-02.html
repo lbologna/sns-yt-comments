@@ -82,19 +82,22 @@
         /* footer row */
         let footerRow = document.createElement("div");
         footerRow.classList.add("row", "bg-light");
-        footerRow.setAttribute("style", "font-size:13px;")
+        footerRow.setAttribute("style", "font-size:12px;")
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
         let videoTitle = element["videoTitle"]
-        let videoPublishedAt = element["videoPublishedAt"]
+        let videoPublishedAt = new Date(element["videoPublishedAt"])
+        let timeVideoPublished = timeText(currentTime, videoPublishedAt);
         let linkToAppPre = "intent://m.youtube.com/watch?v=";
         let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
         let linkToApp = linkToAppPre + videoID + linkToAppPost;
         let replies = element["snippet"]["totalReplyCount"];
 
         let videoDetailsDiv = document.createElement("div");
-        videoDetailsDiv.classList.add("col-12")
+        videoDetailsDiv.classList.add("col-10")
+        let videoPublishedDiv = document.createElement("div");
+        videoPublishedDiv.classList.add("col-2")
         let answersDiv = document.createElement("div");
         answersDiv.classList.add("col-4")
         let appDiv = document.createElement("div");
@@ -104,14 +107,16 @@
         let arrowDiv = document.createElement("div");
         arrowDiv.classList.add("col-2")
 
-        videoDetailsDiv.innerHTML = "<strong>Video: " + videoTitle + "</strong>";
-
+        videoDetailsDiv.innerHTML = "<strong>Video: " + videoTitle + "</strong>" + "  ";
+        videoPublishedDiv.innerHTML = timeVideoPublished;
         answersDiv.innerHTML = "<strong>Risposte: " + replies;
+            
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
         urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> Url</a>";
         arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
         
         footerRow.appendChild(videoDetailsDiv)
+        footerRow.appendChild(videoPublishedDiv)
         footerRow.appendChild(answersDiv)
         footerRow.appendChild(appDiv)
         footerRow.appendChild(urlDiv)
@@ -138,8 +143,16 @@
       let diffDays = DifferenceInTime / (1000 * 3600 * 24);
       let diffHours = diffDays * 24;
       let diffMinutes = diffHours * 60;
+      let diffYears = Math.floor(diffDays/365)
+      let diffMonths = Math.floor(diffDays/30)
       let timeToDisplay = "";
-      if (diffDays > 1) {
+      if (diffYears > 1){
+        timeToDisplay = diffYears + "anni" 
+      }
+      else if (diffMonths > 1){
+        timeToDisplay = diffMonths + "mesi" 
+      }
+      else if (diffDays > 1) {
         let displayTime = Math.floor(diffDays);
         if (displayTime == 1)
           text = "g"
