@@ -50,14 +50,15 @@
         authorTimeRow.classList.add("row");
         /* author div */
         let authorDiv = document.createElement("div");
-        authorDiv.classList.add("col-10", "text-wrap", "text-break")
+        authorDiv.classList.add("col-9", "text-wrap", "text-break")
         let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
         let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
 
         authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong>";
         /* time div */
         let timeDiv = document.createElement("div");
-        timeDiv.classList.add("col-2")
+        timeDiv.classList.add("col-3")
+        timeDiv.setAttribute("style", "font-size:12px")
         let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
         let currentTime = new Date();
         let creationDate = new Date(creationDateString);
@@ -71,7 +72,7 @@
         /* comment row */
         let commentRow = document.createElement("div");
         commentRow.classList.add("row");
-        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:10px")
+        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:10px;")
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("col-12", "text-wrap", "text-break");
         let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
@@ -81,8 +82,8 @@
 
         /* footer row */
         let footerRow = document.createElement("div");
-        footerRow.classList.add("row", "bg-light");
-        footerRow.setAttribute("style", "font-size:12px;")
+        footerRow.classList.add("row");
+        footerRow.setAttribute("style", "font-size:12px; background-color: #edebeb")
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
@@ -95,9 +96,7 @@
         let replies = element["snippet"]["totalReplyCount"];
 
         let videoDetailsDiv = document.createElement("div");
-        videoDetailsDiv.classList.add("col-10")
-        let videoPublishedDiv = document.createElement("div");
-        videoPublishedDiv.classList.add("col-2")
+        videoDetailsDiv.classList.add("col-12")
         let answersDiv = document.createElement("div");
         answersDiv.classList.add("col-4")
         let appDiv = document.createElement("div");
@@ -107,8 +106,7 @@
         let arrowDiv = document.createElement("div");
         arrowDiv.classList.add("col-2")
 
-        videoDetailsDiv.innerHTML = "<strong>Video: " + videoTitle + "</strong>" + "  ";
-        videoPublishedDiv.innerHTML = timeVideoPublished;
+        videoDetailsDiv.innerHTML = "<strong>Video: " + videoTitle + "</strong>" + " - " + timeVideoPublished;
         answersDiv.innerHTML = "<strong>Risposte: " + replies;
             
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
@@ -116,7 +114,6 @@
         arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
         
         footerRow.appendChild(videoDetailsDiv)
-        footerRow.appendChild(videoPublishedDiv)
         footerRow.appendChild(answersDiv)
         footerRow.appendChild(appDiv)
         footerRow.appendChild(urlDiv)
@@ -147,31 +144,39 @@
       let diffMonths = Math.floor(diffDays/30)
       let timeToDisplay = "";
       if (diffYears > 1){
-        timeToDisplay = diffYears + "anni" 
+        if (diffYears == 1)
+          text = " anno"
+        else
+          text = " anni"
+        timeToDisplay = diffYears + text 
       }
       else if (diffMonths > 1){
-        timeToDisplay = diffMonths + "mesi" 
+        if (diffMonths == 1)
+          text = " mese"
+        else
+          text = " mesi"
+        timeToDisplay = diffMonths + text
       }
       else if (diffDays > 1) {
         let displayTime = Math.floor(diffDays);
         if (displayTime == 1)
-          text = "g"
+          text = " giorno"
         else
-          text = "g"
+          text = " giorni"
         timeToDisplay = displayTime + text;
       } else if (diffHours > 1) {
         let displayTime = Math.floor(diffHours);
         if (displayTime == 1)
-          text = "h"
+          text = " ora"
         else
-          text = "h"
+          text = " ore"
         timeToDisplay = displayTime + text;
       } else {
         let displayTime = Math.ceil(diffMinutes);
         if (displayTime == 1)
-          text = "m"
+          text = " min"
         else
-          text = "m"
+          text = " min"
         timeToDisplay = displayTime + text;
       }
       timeToDisplay = timeToDisplay;
