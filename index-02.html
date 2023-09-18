@@ -71,7 +71,7 @@
         /* comment row */
         let commentRow = document.createElement("div");
         commentRow.classList.add("row");
-        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:8px")
+        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:10px")
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("col-12", "text-wrap", "text-break");
         let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
@@ -81,8 +81,8 @@
 
         /* footer row */
         let footerRow = document.createElement("div");
-        footerRow.classList.add("row");
-        footerRow.setAttribute("style", "font-size:14px")
+        footerRow.classList.add("row", "bg-light");
+        footerRow.setAttribute("style", "font-size:13px;")
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
@@ -104,9 +104,9 @@
         let arrowDiv = document.createElement("div");
         arrowDiv.classList.add("col-2")
 
-        videoDetailsDiv.innerHTML = "<strong>Video:</strong> " + videoTitle;
+        videoDetailsDiv.innerHTML = "<strong>Video: " + videoTitle + "</strong>";
 
-        answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
+        answersDiv.innerHTML = "<strong>Risposte: " + replies;
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
         urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> Url</a>";
         arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
@@ -189,7 +189,7 @@
       </ul>
       <button id="updateBtn" onclick="execute()"
         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; margin-top:6px; margin-bottom:6px"
-        type="button" class="container rounded-4 btn btn-secondary">
+        type="button" class="container rounded-4 btn btn-success">
         Aggiorna
       </button>
     </div>
