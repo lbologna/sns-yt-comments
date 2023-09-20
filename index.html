@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 
 <html>
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,15 +18,15 @@
       document.getElementById("2a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
       document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
 
-      const fetchResSNS = await fetch("https://lucaleonardobologna.it/snscomments/");
+      const fetchResSNS = await fetch("https://lucaleonardobologna.it/snscommentsfull/");
       const jsonDataSNS = await fetchResSNS.json();
       populate(jsonDataSNS, "1a");
 
-      const fetchResSC = await fetch("https://lucaleonardobologna.it/sccomments/");
+      const fetchResSC = await fetch("https://lucaleonardobologna.it/sccommentsfull/");
       const jsonDataSC = await fetchResSC.json();
       populate(jsonDataSC, "2a");
 
-      const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcomments/");
+      const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcommentsfull/");
       const jsonDataPGENG = await fetchResPGENG.json();
       populate(jsonDataPGENG, "3a");
     }
@@ -50,14 +49,16 @@
         authorTimeRow.classList.add("row");
         /* author div */
         let authorDiv = document.createElement("div");
-        authorDiv.classList.add("col-10", "text-wrap", "text-break")
+        authorDiv.classList.add("col-8", "text-wrap", "text-break")
+        authorDiv.setAttribute("style", "font-size:14px")
         let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
         let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
 
-        authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong>";
+        authorDiv.innerHTML = "<img width=22px src='" + authorImage + "''> <strong>" + author + "</strong>";
         /* time div */
         let timeDiv = document.createElement("div");
-        timeDiv.classList.add("col-2")
+        timeDiv.classList.add("col-4")
+        timeDiv.setAttribute("style", "font-size:13px")
         let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
         let currentTime = new Date();
         let creationDate = new Date(creationDateString);
@@ -71,7 +72,7 @@
         /* comment row */
         let commentRow = document.createElement("div");
         commentRow.classList.add("row");
-        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:8px")
+        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:12px;")
         let commentDiv = document.createElement("div");
         commentDiv.classList.add("col-12", "text-wrap", "text-break");
         let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
@@ -82,15 +83,20 @@
         /* footer row */
         let footerRow = document.createElement("div");
         footerRow.classList.add("row");
-        footerRow.setAttribute("style", "font-size:14px")
+        footerRow.setAttribute("style", "font-size:13px; background-color: #f1f1f1; padding-bottom:7px; padding-top:7px")
         let footerDiv = document.createElement("div");
         footerDiv.classList.add("col-12", "text-wrap", "text-break");
         let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
+        let videoTitle = element["videoTitle"]
+        let videoPublishedAt = new Date(element["videoPublishedAt"])
+        let timeVideoPublished = timeText(currentTime, videoPublishedAt);
         let linkToAppPre = "intent://m.youtube.com/watch?v=";
         let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
         let linkToApp = linkToAppPre + videoID + linkToAppPost;
         let replies = element["snippet"]["totalReplyCount"];
 
+        let videoDetailsDiv = document.createElement("div");
+        videoDetailsDiv.classList.add("col-12")
         let answersDiv = document.createElement("div");
         answersDiv.classList.add("col-4")
         let appDiv = document.createElement("div");
@@ -100,11 +106,14 @@
         let arrowDiv = document.createElement("div");
         arrowDiv.classList.add("col-2")
 
-        answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
+        videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
+        answersDiv.innerHTML = "<strong>Risposte: " + replies;
+            
         appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
         urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> Url</a>";
         arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
-
+        
+        footerRow.appendChild(videoDetailsDiv)
         footerRow.appendChild(answersDiv)
         footerRow.appendChild(appDiv)
         footerRow.appendChild(urlDiv)
@@ -131,27 +140,45 @@
       let diffDays = DifferenceInTime / (1000 * 3600 * 24);
       let diffHours = diffDays * 24;
       let diffMinutes = diffHours * 60;
+      let diffYears = diffDays/365;
+      let diffMonths = diffDays/30;
       let timeToDisplay = "";
-      if (diffDays > 1) {
+      if (diffYears > 1){
+        let displayTime = Math.floor(diffYears);
+        if (displayTime == 1)
+          text = " anno fa"
+        else
+          text = " anni fa"
+        timeToDisplay = displayTime + text 
+      }
+      else if (diffMonths > 1){
+        let displayTime = Math.floor(diffMonths);
+        if (displayTime == 1)
+          text = " mese fa"
+        else
+          text = " mesi fa"
+        timeToDisplay = displayTime + text
+      }
+      else if (diffDays > 1) {
         let displayTime = Math.floor(diffDays);
         if (displayTime == 1)
-          text = "g"
+          text = " giorno fa"
         else
-          text = "g"
+          text = " giorni fa"
         timeToDisplay = displayTime + text;
       } else if (diffHours > 1) {
         let displayTime = Math.floor(diffHours);
         if (displayTime == 1)
-          text = "h"
+          text = " ora fa"
         else
-          text = "h"
+          text = " ore fa"
         timeToDisplay = displayTime + text;
       } else {
         let displayTime = Math.ceil(diffMinutes);
         if (displayTime == 1)
-          text = "m"
+          text = " min fa"
         else
-          text = "m"
+          text = " min fa"
         timeToDisplay = displayTime + text;
       }
       timeToDisplay = timeToDisplay;
@@ -181,8 +208,8 @@
         </li>
       </ul>
       <button id="updateBtn" onclick="execute()"
-        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; margin-top:6px; margin-bottom:6px"
-        type="button" class="container rounded-4 btn btn-secondary">
+        style="background-color: white; border-color: #ffd174; border-width: 4px; --bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; margin-top:6px; margin-bottom:6px"
+        type="button" class="container rounded-4 btn">
         Aggiorna
       </button>
     </div>
@@ -220,5 +247,4 @@
       })
     })</script>
 </body>
-
 </html>
