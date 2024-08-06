@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+  <title>SNS trascrizioni</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+
+<style>
+.mainHeader{
+  background-color: rgb(202, 202, 202);
+  text-align: center;
+}
+.top-btns, .curationSpanStyle {
+    border: solid;
+    border-width: 1px;
+    border-color: aliceblue;
+  }
+
+.curationSpanStyle {
+    text-align: center;
+    font-size: 12px;
+    vertical-align: middle;
+  }
+
+  .bck-red{
+    background-color: red;
+  }
+
+  .bck-green{
+    background-color: green;
+  }
+
+  .clr-white{
+    color:white;
+  }
+
+.curationBtns {
+    container: 'body';
+  }
+</style>
+
+<body id="body" onload="execute()">
+  <script>
+    let currentId = "";
+    localStorage.setItem('curator', "");
+    localStorage.setItem('pwd', "");
+    let curationInfo = "";
+
+    if (window.location.href.includes("https://lbologna.github.io")){
+      mainurl = "https://lucaleonardobologna.it"
+    } else if (window.location.href.includes("http://127.0.0.1:")) {
+      mainurl = "http://127.0.0.1:5000";
+    }
+
+    let transcriptUrl = mainurl + "/snstranscripts/";
+    let saveUrl = mainurl + "/savesnstranscripts/";
+    let checkUrl = mainurl + "/checkpwd/";
+    let modifyColorStyle = "background-color:rgb(240,240,245); color:rgb(0,0,90)";
+    let buttonsOutlineStyle = "border:solid; border-color:rgb(200,200,200); border-width:1px";
+
+    async function execute() {
+
+      const snsTranscript = await fetch(transcriptUrl);
+      const jsonSnSTranscript = await snsTranscript.json();
+
+      const snsVideoInfo = await fetch(mainurl + "/getsnsjson/");
+      const snsVideoJson = await snsVideoInfo.json();
+
+      populate(snsVideoJson, jsonSnSTranscript)
+    }
+
+    function populate(snsVideoJson, jsonSnSTranscript,) {
+      let video_id_ts_list = jsonSnSTranscript["video_id_ts_list"]
+      let keys = Object.keys(jsonSnSTranscript);
+      let counter = keys.length;
+      video_id_ts_list.forEach(element => {
+        // collapsible div
+        let collapseDiv = document.createElement("div");
+        collapseDiv.classList.add("container")
+        collapseDiv.setAttribute("style", "margin-top:8px; margin-bottom:12px; border-bottom:solid; border-bottom-width:2px; border-bottom-color:rgb(220, 220, 250)")
+
+        // collapsible button row
+        let collapseBtnDiv = document.createElement("div");
+        collapseBtnDiv.classList.add("row");
+
+        // link buttons row
+        let clickBtnsDiv = document.createElement("div");
+        clickBtnsDiv.setAttribute("style", "margin-top:2px; margin-bottom:2px");
+        clickBtnsDiv.classList.add("row");
+
+        // collapsible main button
+        let caButton = document.createElement("a");
+        caButton.classList.add("btn", "btn-primary", "btn-sm", "btn-block", "col-12")
+        caButton.setAttribute("id", "cbt_" + element);
+        caButton.setAttribute("data-bs-toggle", "collapse")
+        caButton.setAttribute("href", "#".concat(element))
+        caButton.setAttribute("role", "button")
+        caButton.setAttribute("aria-expanded", "false")
+        caButton.setAttribute("aria-controls", element)
+        caButton.innerHTML = snsVideoJson[element]["title"] + " (" + snsVideoJson[element]["videoPublishedAt"].substr(0, 10) + ") - #" + counter;
+        counter -= 1;
+        collapseBtnDiv.appendChild(caButton)
+
+        // text parent div
+        let contentDiv = document.createElement("div");
+        contentDiv.classList.add("collapse", "my-collapse-div")
+        contentDiv.setAttribute("id", element)
+
+        // text div
+        let textDiv = document.createElement("div");
+        textDiv.classList.add("card", "card-body")
+        textDiv.setAttribute("id", "txt_" + element)
+        textDiv.setAttribute("style", modifyColorStyle);
+        textDiv.innerHTML = jsonSnSTranscript[element]["text"]
+
+        // modify button
+        let modifyButton = document.createElement("button");
+        let modifyButtonId = "mod_" + element;
+        modifyButton.setAttribute("id", modifyButtonId)
+        modifyButton.setAttribute("type", "button");
+        modifyButton.innerHTML = "Modifica";
+        modifyButton.setAttribute("style", buttonsOutlineStyle);
+        modifyButton.classList.add("btn", "btn-link", "btn-sm", "col-4");
+
+
+        // save button
+        let saveButton = document.createElement("button");
+        let saveButtonId = "sav_" + element;
+        saveButton.setAttribute("id", saveButtonId);
+        saveButton.setAttribute("type", "button")
+        saveButton.innerHTML = "Salva";
+        saveButton.setAttribute("style", buttonsOutlineStyle);
+        saveButton.classList.add("btn", "btn-link", "btn-sm", "col-4");
+
+        // video url button
+        let videoButton = document.createElement("button"); // video url paragraph
+        let videoUrl = "https://www.youtube.com/watch?v=" + element
+        videoButton.classList.add("btn", "btn-link", "btn-sm", "col-3");
+        videoButton.innerHTML = "Video";
+        videoButton.setAttribute("onclick", "window.open('" + videoUrl + "'),'_blank'")
+        videoButton.setAttribute("style", buttonsOutlineStyle);
+
+        // curation url button
+        let curationButton = document.createElement("button"); // video url paragraph
+        curationButton.classList.add("col-1", "btn", "btn-sm", "curationSpanStyle", "curationBtns");
+        curationButton.setAttribute("type", "button");
+        curationButton.setAttribute("id", "curinfo_" + element);
+        curationButton.addEventListener("click", showCurationInfo);
+        let curator = jsonSnSTranscript[element]["modified_by"]
+        if (curator == "") {
+          curationButton.setAttribute("style", "background-color:red; color:white");
+          curationButton.setAttribute("title", "Trascrizione non curata");
+          curationButton.innerHTML = "NC";
+        } else {
+          curationButton.setAttribute("style", "background-color:green; color:white");
+          curationButton.setAttribute("title", "Trascrizione curata da: " + jsonSnSTranscript[element]["modified_by"]);
+          curationButton.innerHTML = "C";
+        }
+
+        clickBtnsDiv.appendChild(modifyButton);
+        clickBtnsDiv.appendChild(saveButton);
+        clickBtnsDiv.appendChild(videoButton);
+        clickBtnsDiv.appendChild(curationButton);
+
+        contentDiv.appendChild(textDiv)
+
+        collapseDiv.appendChild(collapseBtnDiv)
+        collapseDiv.appendChild(clickBtnsDiv)
+        collapseDiv.appendChild(contentDiv)
+
+        document.body.appendChild(collapseDiv)
+
+        document.getElementById(modifyButtonId).onclick = modifyCheck;
+        document.getElementById(saveButtonId).onclick = save;
+        document.getElementById("openAllBtn").onclick = openAll;
+        document.getElementById("closeAllBtn").onclick = closeAll;
+        document.getElementById("modalOkBtn").onclick = checkNamePwd;
+      })
+    }
+
+    async function checkNamePwd() {
+      let names = document.getElementById('curator-input-text').value;
+      let pwd = document.getElementById('pwd-input-text').value;
+
+      const request = new Request(checkUrl, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ "pwd": pwd, "names": names }),
+      });
+
+      const checkResponse = await fetch(request);
+      const checkResponseJson = await checkResponse.json();
+
+      if (checkResponseJson["responseStatus"] == "ok") {
+        $('#name-pwd-modal').modal('hide');
+
+        localStorage.setItem('curator', names);
+        localStorage.setItem('pwd', pwd);
+        modify(currentId);
+      } else {
+        $('#name-pwd-modal').modal('hide');
+        $('#error-modal').modal('show');
+      }
+    }
+
+    function modifyCheck() {
+      if (localStorage.getItem('curator') != "" && localStorage.getItem('pwd') != "") {
+        modify(this.id);
+      } else {
+        currentId = this.id;
+        let modalEl = document.getElementById("name-pwd-modal");
+        $('#name-pwd-modal').modal('show');
+      }
+    }
+
+    function modify(id) {
+      let textDivId = "txt_" + id.substr(4);
+      let textDiv = document.getElementById(textDivId);
+      textDiv.setAttribute("style", "background-color:white; color:black");
+      textDiv.setAttribute("contenteditable", "true");
+      textDiv.classList.add("editable");
+      let collDiv = document.getElementById(id.substr(4));
+      collDiv.classList.add("show")
+    }
+
+    // save new content to transcripts file
+    async function save() {
+      let key = this.id.substr(4);
+      let textDivId = "txt_" + key;
+      let textDiv = document.getElementById(textDivId);
+      textDiv.setAttribute("style", modifyColorStyle);
+      textDiv.setAttribute("contenteditable", "false");
+      textDiv.classList.remove("editable");
+
+      const request = new Request(saveUrl, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({ "id": key, "text": textDiv.innerHTML, "curator": localStorage.getItem("curator") }),
+      });
+    
+    const checkResponse = await fetch(request);
+    const checkResponseJson = await checkResponse.json(); 
+    }
+
+    function openAll() {
+      let allDivs = document.querySelectorAll(".my-collapse-div");
+      allDivs.forEach(item => { item.classList.add("show") })
+    }
+
+    function closeAll() {
+      let allDivs = document.querySelectorAll(".my-collapse-div");
+      allDivs.forEach(item => { item.classList.remove("show") })
+    }
+
+    function showCurationInfo(){
+      console.log(this)
+      document.getElementById("info-modal").innerHTML = this.title;
+      $('#curation-info-modal').modal('show');
+
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+
+  <script>
+    document.querySelectorAll('.go-up-btn').forEach(linkItem => {
+      linkItem.addEventListener('click', _ => {
+        window.scrollTo(0, 0)
+      })
+    });
+
+  </script>
+
+<!-- static html content -->
+  <div class="modal fade" id="curation-info-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color:cornflowerblue; color:aliceblue">
+          <h5 class="modal-title">Info trascrizione</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+        </div>
+        <div class="modal-body">
+          <p id="info-modal"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="error-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header" style="background-color: red; color:aliceblue">
+          <h5 class="modal-title">ERRORE!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+        </div>
+        <div class="modal-body">
+          <p>Nome/i non fornito/i o password errata!</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade" id="name-pwd-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Inserisci i dati</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="curator-input">Chi sei / Chi siete?</span>
+            </div>
+            <input id="curator-input-text" type="text" class="form-control" aria-label="Default"
+              aria-describedby="curator-input" required>
+          </div>
+
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="pwd-input">Password</span>
+            </div>
+            <input id="pwd-input-text" type="password" class="form-control" aria-label="Default"
+              aria-describedby="pwd-input" required>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" id="modalOkBtn" class="btn btn-primary">Ok</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- create mainDiv for button row -->
+  <div id="mainDiv" class="sticky-top">
+    <div class="container sticky-top">
+      <div class="row justify-content-md-center">
+        <button class="top-btns btn btn-sm btn-warning col-2" onclick='window.location.reload();'><i
+            class='bi bi-arrow-repeat'></i></button>
+        <button id="openAllBtn" class="top-btns btn btn-sm btn-success col-4 ">Apri tutti</button>
+        <button id="closeAllBtn" class="top-btns btn btn-sm btn-success col-4">Chiudi tutti</button>
+        <button class="top-btns btn btn-sm btn-warning col-1" onclick='window.scrollTo(0, 0)'><i
+            class='bi bi-arrow-up'></i></button>
+        <button class="top-btns btn btn-sm btn-warning col-1"
+          onclick='window.scrollTo(0, document.body.scrollHeight)'><i class='bi bi-arrow-down '></i></button>
+      </div>
+    </div>
+  </div>
+
+  
+</body>
+
+</html>
