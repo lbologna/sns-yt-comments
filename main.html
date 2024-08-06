@@ -1,210 +1,224 @@
+<!DOCTYPE html>
+
 <html>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-<body id="banner">
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-  
-  <body id="banner">
 
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>sns-yt-comments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+</head>
+
+<body id="banner" onload="execute()">
   <script>
-    /**
-     * Sample JavaScript code for youtube.commentThreads.list
-     * See instructions for running APIs Explorer code samples locally:
-     * https://developers.google.com/explorer-help/code-samples#javascript
-     */
-    gapi.load("client")
-    function loadClient() {
-      let snsId = "UC5jvSA87qg0yT1Ya4doCkTQ";
-      let scId = "UC6N1rrcxin_xuMd1SqMWJeg";
-      let pgengId = "UCaYInMAT5L4jxH13gnwHu-Q";
-      gapi.client.setApiKey("");
-      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-          .then(function() { 
-            console.log("GAPI client loaded for API"); 
-            execute(snsId, "1a");
-            execute(scId, "2a");
-            execute(pgengId, "3a");
-          },
-                function(err) { console.error("Error loading GAPI client for API", err); });
-    }
     // Make sure the client is loaded before calling this method.
-    function execute(chId, divId) {
-      return gapi.client.youtube.commentThreads.list({
-        "part": [
-          "snippet, replies"
-        ],
-        "allThreadsRelatedToChannelId": chId,
-        "prettyPrint": true,
-        "maxResults": 100,
-      })
-          .then(function(response){
-            populate(response, divId);
+    async function execute() {
+      document.getElementById("1a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
+      document.getElementById("2a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
+      document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
 
-          })
-    function populate(response, divId){
-              let mainSnSdiv = document.getElementById(divId);
-                  mainSnSdiv.innerHTML = "";
-                  mainSnSdiv.scrollTop = 0;
-                  // Handle the results here (response.result has the parsed body).
-                  let res = JSON.parse(response["body"]);
-                  console.log(res["items"])
-                  res["items"].forEach(element => {
-                    /* container div */
-                    let cdiv = document.createElement("div");
-                    cdiv.classList.add("container");
-                    
-                    /* title row div */
-                    let titleDiv = document.createElement("div");
-                    titleDiv.classList.add("row", "border", "text-wrap");
-                    /* title content div */
-                    let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
-                    console.log(videoID)
-                    let titleContentDiv = document.createElement("div");
-                    titleContentDiv.classList.add("col-12", "border");
-                    let linkToVideo = "<a href='https://www.youtube.com/watch?v=" + videoID +"' target=_blank>Apri in YT</a> - <a href='#banner'><i class='bi bi-arrow-up'></i><a>";
-                    let replies = element["snippet"]["totalReplyCount"];
-                    let repliesText = "<strong>Risposte:</strong> " + replies + " - "
-                    titleDiv.appendChild(titleContentDiv);
-                    cdiv.appendChild(titleDiv);
-                    
-                    /* row div */
-                    let rdiv = document.createElement("div");
-                    rdiv.classList.add("row", "border", "text-wrap");
-                    cdiv.appendChild(rdiv);
-                    /* comment div */
-                    let commentDiv = document.createElement("div");
-                    commentDiv.classList.add("col-10", "text-wrap");
-                    let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
-                    let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
-                    let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
-                   
+      const fetchResSNS = await fetch("https://lucaleonardobologna.it/snscomments/");
+      const jsonDataSNS = await fetchResSNS.json();
+      populate(jsonDataSNS, "1a");
 
-                    commentDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong><br>" + comment + "<br>" + repliesText + linkToVideo ;
-                    rdiv.appendChild(commentDiv);
-                    /* date div */
-                    let dateDiv = document.createElement("div");
-                    dateDiv.classList.add("col-2", "text-wrap");
-                    let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
-                    rdiv.appendChild(dateDiv);
-                    cdiv.scrollTop = 0;
-                    rdiv.scrollTop = 0;
-                    mainSnSdiv.appendChild(cdiv);
-                    
-                    let currentTime = new Date();
-                    let creationDate = new Date(creationDateString);
+      const fetchResSC = await fetch("https://lucaleonardobologna.it/sccomments/");
+      const jsonDataSC = await fetchResSC.json();
+      populate(jsonDataSC, "2a");
 
-                    textToDisplay = timeText(currentTime, creationDate);
-                    //To display the final no. of days (result)
-                    dateDiv.innerHTML = textToDisplay ;
-                  });
-                }
-                
-
+      const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcomments/");
+      const jsonDataPGENG = await fetchResPGENG.json();
+      populate(jsonDataPGENG, "3a");
     }
+
+
+    function populate(res, divId) {
+      let mainSnSdiv = document.getElementById(divId);
+      mainSnSdiv.innerHTML = "";
+      mainSnSdiv.scrollTop = 0;
+
+      // Handle the results here (response.result has the parsed body).
+      res["items"].forEach(element => {
+        /* container div */
+        let cdiv = document.createElement("div");
+        cdiv.classList.add("container", "border");
+        cdiv.setAttribute("style", "padding-top:4px; padding-bottom:4px")
+
+        /* author-time row" */
+        let authorTimeRow = document.createElement("div");
+        authorTimeRow.classList.add("row");
+        /* author div */
+        let authorDiv = document.createElement("div");
+        authorDiv.classList.add("col-10", "text-wrap", "text-break")
+        let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
+        let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
+
+        authorDiv.innerHTML = "<img width=20px src='" + authorImage + "''> <strong>" + author + "</strong>";
+        /* time div */
+        let timeDiv = document.createElement("div");
+        timeDiv.classList.add("col-2")
+        let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
+        let currentTime = new Date();
+        let creationDate = new Date(creationDateString);
+        let timeToDisplay = timeText(currentTime, creationDate);
+        timeDiv.innerHTML = timeToDisplay;
+        /* */
+        authorTimeRow.appendChild(authorDiv)
+        authorTimeRow.appendChild(timeDiv)
+        cdiv.appendChild(authorTimeRow)
+
+        /* comment row */
+        let commentRow = document.createElement("div");
+        commentRow.classList.add("row");
+        commentRow.setAttribute("style", "margin-top:8px; margin-bottom:8px")
+        let commentDiv = document.createElement("div");
+        commentDiv.classList.add("col-12", "text-wrap", "text-break");
+        let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
+        commentDiv.innerHTML = comment + "<br>";
+        commentRow.appendChild(commentDiv)
+        cdiv.appendChild(commentRow)
+
+        /* footer row */
+        let footerRow = document.createElement("div");
+        footerRow.classList.add("row");
+        footerRow.setAttribute("style", "font-size:14px")
+        let footerDiv = document.createElement("div");
+        footerDiv.classList.add("col-12", "text-wrap", "text-break");
+        let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
+        let linkToAppPre = "intent://m.youtube.com/watch?v=";
+        let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
+        let linkToApp = linkToAppPre + videoID + linkToAppPost;
+        let replies = element["snippet"]["totalReplyCount"];
+
+        let answersDiv = document.createElement("div");
+        answersDiv.classList.add("col-4")
+        let appDiv = document.createElement("div");
+        appDiv.classList.add("col-3")
+        let urlDiv = document.createElement("div");
+        urlDiv.classList.add("col-3")
+        let arrowDiv = document.createElement("div");
+        arrowDiv.classList.add("col-2")
+
+        answersDiv.innerHTML = "<strong>Risposte:</strong> " + replies;
+        appDiv.innerHTML = "<a href='" + linkToApp + "'><i class='bi bi-youtube'></i> App</a>"
+        urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><i class='bi bi-youtube'></i> Url</a>";
+        arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
+
+        footerRow.appendChild(answersDiv)
+        footerRow.appendChild(appDiv)
+        footerRow.appendChild(urlDiv)
+        footerRow.appendChild(arrowDiv)
+
+        cdiv.appendChild(footerRow)
+
+        let titleContentDiv = document.createElement("div");
+        titleContentDiv.classList.add("col-12");
+
+        cdiv.scrollTop = 0;
+        mainSnSdiv.appendChild(cdiv);
+      });
+    }
+
 
     /* ------------ */
 
-    function timeText(currentTime, creationDate){
+    function timeText(currentTime, creationDate) {
       // To calculate the time difference of two dates
       var DifferenceInTime = currentTime.getTime() - creationDate.getTime();
-      
+
       // To calculate the no. of days between two dates
       let diffDays = DifferenceInTime / (1000 * 3600 * 24);
       let diffHours = diffDays * 24;
       let diffMinutes = diffHours * 60;
       let timeToDisplay = "";
-      if (diffDays > 1){
+      if (diffDays > 1) {
         let displayTime = Math.floor(diffDays);
         if (displayTime == 1)
           text = "g"
         else
           text = "g"
-          timeToDisplay = displayTime + text;
-      } else if(diffHours > 1 ){
+        timeToDisplay = displayTime + text;
+      } else if (diffHours > 1) {
         let displayTime = Math.floor(diffHours);
         if (displayTime == 1)
           text = "h"
         else
           text = "h"
-          timeToDisplay = displayTime + text;
+        timeToDisplay = displayTime + text;
       } else {
         let displayTime = Math.ceil(diffMinutes);
         if (displayTime == 1)
           text = "m"
         else
           text = "m"
-          timeToDisplay = displayTime + text;
+        timeToDisplay = displayTime + text;
       }
       timeToDisplay = timeToDisplay;
       return timeToDisplay;
     }
 
 
-    
+
   </script>
-  <div id="banner" class="container sticky-top" style="height:35px; margin:2px">
-    <div class="row" >
-      <div style="border-style: none; border-radius: 5px; background-color:rgb(100, 146, 225)" class="text-center col-10 bg-body-secondary">
-        <strong>SnS Youtube - Ultimi commenti</strong>
-      </div>
-      <button style="padding:0px" onclick="loadClient()" type="button" class="bg-warning col-2 btn btn-sm btn-link">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
-<path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"></path>
-<path fill-rule="evenodd" d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"></path>
-</svg>
-        <span class="visually-hidden"></span>
+
+  <!-- Tab content -->
+  <div id="exTab1" class="">
+    <div id="" class="sticky-top container" style="margin-top:2px">
+      <ul class=" nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist"
+        style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+        <li class="nav-item" role="presentation">
+          <button href="#1a" class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button"
+            role="tab" aria-selected="true">SnS</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button href="#2a" class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+            aria-selected="false">Siate Curiosi</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button href="#3a" class="nav-link rounded-5" id="contact-tab2" data-bs-toggle="tab" type="button" role="tab"
+            aria-selected="false">PG Eng</button>
+        </li>
+      </ul>
+      <button id="updateBtn" onclick="execute()"
+        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem; margin-top:6px; margin-bottom:6px"
+        type="button" class="container rounded-4 btn btn-secondary">
+        Aggiorna
       </button>
-  </div>
-</div>
-
-<!-- Tab content -->
-<div id="exTab1" class="container">	
-<ul  class="nav nav-tabs mb-3">
-			<li class="nav-link active"><a href="#1a" data-toggle="tab">SnS</a>
-			</li>
-			<li><a class="nav-link " href="#2a" data-toggle="tab">Siate Curiosi</a>
-			</li>
-			<li><a class="nav-link " href="#3a" data-toggle="tab">PG ENG</a>
-			</li>
-		</ul>
-
-			<div class="tab-content clearfix">
-			  <div class="tab-pane active" id="1a">
-          Clicca su
-          <i class="bi bi-arrow-repeat"></i>
-          in alto a destra
-				</div>
-				<div class="tab-pane" id="2a">
-          Clicca su
-          <i class="bi bi-arrow-repeat"></i>
-          in alto a destra
-        				</div>
-        <div class="tab-pane" id="3a">
-          Clicca su
-          <i class="bi bi-arrow-repeat"></i>
-          in alto a destra
+    </div>
+    <div id="tab-container" class=" container ">
+      <div class="row tab-content clearfix">
+        <div class="tab-pane active" id="1a">
         </div>
-			</div>
-  </div>
-</div>
-<!-- Tab content -->
+        <div class="tab-pane" id="2a">
+        </div>
+        <div class="tab-pane" id="3a">
+        </div>
+      </div>
+    </div>
 
-<!-- Bootstrap core JavaScript
+  </div>
+
+  <!-- Tab content -->
+
+  <!-- Bootstrap core JavaScript
     ================================================== -->
-	<!-- Placed at the end of the document so the pages load faster -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
-
-
-
-
-
-
-
-
+  <!-- Placed at the end of the document so the pages load faster -->
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+    integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+    crossorigin="anonymous"></script>
+  <script>    document.querySelectorAll('.nav-link').forEach(linkItem => {
+      linkItem.addEventListener('click', _ => {
+        window.scrollTo(0, 0)
+      })
+    })</script>
 </body>
+
 </html>
