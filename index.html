@@ -12,21 +12,26 @@
 
 <body id="banner" onload="execute()">
   <script>
+    if (window.location.href.includes("https://lbologna.github.io")){
+      mainurl = "https://lucaleonardobologna.it"
+    } else if (window.location.href.includes("http://127.0.0.1:")) {
+      mainurl = "http://127.0.0.1:5000";
+    }
     // Make sure the client is loaded before calling this method.
     async function execute() {
       document.getElementById("1a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
       document.getElementById("2a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
       document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
 
-      const fetchResSNS = await fetch("https://lucaleonardobologna.it/snscommentsfull/");
+      const fetchResSNS = await fetch(mainurl + "/snscommentsfull/");
       const jsonDataSNS = await fetchResSNS.json();
       populate(jsonDataSNS, "1a");
 
-      const fetchResSC = await fetch("https://lucaleonardobologna.it/sccommentsfull/");
+      const fetchResSC = await fetch(mainurl + "/sccommentsfull/");
       const jsonDataSC = await fetchResSC.json();
       populate(jsonDataSC, "2a");
 
-      const fetchResPGENG = await fetch("https://lucaleonardobologna.it/pgengcommentsfull/");
+      const fetchResPGENG = await fetch(mainurl + "/pgengcommentsfull/");
       const jsonDataPGENG = await fetchResPGENG.json();
       populate(jsonDataPGENG, "3a");
     }
