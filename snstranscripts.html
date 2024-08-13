@@ -36,7 +36,8 @@
 </style>
 
 <!-- static html content -->
-<body id="body" onload="execute()">
+
+<body id="body">
 
   <!-- curation info modal -->
   <div class="modal fade" id="curation-info-modal" tabindex="-1">
@@ -50,17 +51,57 @@
     </div>
   </div>
 
-    <!-- successful save text modal -->
-    <div class="modal fade" id="success-modal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div id="success-modal-header" class="modal-header bg-success bg-gradient border border-success text-light">
-            <h5 class="modal-title">Trascrizione salvata con successo!</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
-          </div>
+  <!-- successful save text modal -->
+  <div class="modal fade" id="success-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div id="success-modal-header" class="modal-header bg-success bg-gradient border border-success text-light">
+          <h5 class="modal-title">Trascrizione salvata con successo!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
         </div>
       </div>
     </div>
+  </div>
+
+
+  <!-- empty search warning modal -->
+  <div class="modal fade" id="search-warning-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-light">
+          <h5 class="modal-title">Attenzione!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+        </div>
+        <div class="modal-body">
+          <p id="search-warning-message">Nessun video trovato con i criteri dati."</p>
+        </div>
+        <div class="modal-footer">
+          <button id="" type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- warning modal -->
+  <div class="modal fade" id="warning-modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-warning text-light">
+          <h5 class="modal-title">Attenzione!</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+        </div>
+        <div class="modal-body">
+          <p id="warning-message">Alcuni testi sono in fase di modifica.<br>Le modifiche non salvate verranno perse.<br><br>Continuare?</p>
+        </div>
+        <div class="modal-footer">
+          <button id="warning-modal-no-btn" type="button" class="btn btn-secondary btn"
+            data-bs-dismiss="modal">No</button>
+          <button id="warning-modal-yes-btn" type="button" class="btn btn-primary btn"
+            data-bs-dismiss="modal">Sì</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- error modal -->
   <div class="modal fade" id="error-modal" tabindex="-1">
@@ -71,7 +112,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
         </div>
         <div class="modal-body">
-          <p id="error-message">Password errata o assente!</p>
+          <p id="error-message"></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Chiudi</button>
@@ -98,7 +139,6 @@
               aria-describedby="curator-input" required>
           </div>
           <span><i>* campo obbligatorio</i></span>
-
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
@@ -120,11 +160,12 @@
         <div class="modal-body">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="pwd-input">Password</span>
+              <span class="input-group-text" id="pwd-input">Password*</span>
             </div>
             <input id="pwd-input-text" type="password" class="form-control" aria-label="Default"
               aria-describedby="pwd-input" required>
           </div>
+          <span><i>* campo obbligatorio</i></span>
         </div>
         <!-- Footer with buttons -->
         <div class="modal-footer">
@@ -137,8 +178,8 @@
 
 
 
-  <!-- create mainDiv for button row -->
-  <div id="mainDiv" class="sticky-top">
+  <!-- create main div for button row -->
+  <div id="main-div" class="sticky-top m-2">
     <div class="container sticky-top main-div bg-white">
       <div class="row justify-content-md-center">
         <button class="top-btns btn btn-sm btn-outline-dark rounded-pill col-2" onclick='window.location.reload();'><i
@@ -151,8 +192,20 @@
         <button class="top-btns btn btn-sm btn-outline-dark rounded-pill col-1"
           onclick='window.scrollTo(0, document.body.scrollHeight)'><i class='bi bi-arrow-down '></i></button>
       </div>
+      <div class="input-group mt-2">
+        <input id="search-input" type="text" class="form-control" placeholder="Testo da cercare"
+          aria-label="search-text" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+          <button id="search-button" class="btn btn-outline-secondary" type="button"><i
+              class="bi bi-search"></i></button>
+          <button id="restore-button" class="btn btn-outline-secondary" type="button"><i
+              class="bi bi-eraser-fill"></i></button>
+        </div>
+      </div>
     </div>
   </div>
+
+  <div class="" id="all-collapse-div"></div>
 
   <div id="spinner" class="d-flex justify-content-center" style="margin-top: 30px;">
     <div class="spinner-grow text-primary" role="status">
@@ -164,6 +217,9 @@
   let lastClickedModifyId = "";
   localStorage.setItem('pwd', "");
   let curationInfo = "";
+  let sessionId = (Math.random() + ' ').substring(2, 10) + (Math.random() + ' ').substring(2, 10);
+  localStorage.setItem("sessionId", sessionId);
+  let fadeInTime = 700;
 
   if (window.location.href.includes("https://lbologna.github.io")) {
     mainurl = "https://lucaleonardobologna.it";
@@ -176,32 +232,59 @@
   let checkUrl = mainurl + "/checkpwd/";
   let modifyColorStyle = "background-color:rgb(240,240,245); color:rgb(0,0,90)";
   let currentSaveBtnId = "";
+  let snsTranscript
+  let jsonSnSTranscript;
+  let snsVideoInfo;
+  let snsVideoJson;
+
+  $('document').ready(execute);
+
+  $("#curator-modal-ok-btn").on("click", save);
+  $("#openAllBtn").on("click", openAll);
+  $("#closeAllBtn").on("click", closeAll);
+  $("#pwdModalOkBtn").on("click", pwdCheck);
+  $("#search-button").on("click", search);
+  $("#restore-button").on("click", reload);
+  $("#warning-modal-yes-btn").on("click", reload);
+
 
   async function execute() {
-    $('#mainDiv').hide();
-    $('#collapse-div').hide();
-    document.getElementById("spinner").classList.add("d-block");
+    showSpinner();
+    snsTranscript = await fetch(transcriptUrl);
+    jsonSnSTranscript = await snsTranscript.json();
 
-
-    const snsTranscript = await fetch(transcriptUrl);
-    const jsonSnSTranscript = await snsTranscript.json();
-
-    const snsVideoInfo = await fetch(mainurl + "/getsnsjson/");
-    const snsVideoJson = await snsVideoInfo.json();
+    snsVideoInfo = await fetch(mainurl + "/getsnsjson/");
+    snsVideoJson = await snsVideoInfo.json();
 
     await populate(snsVideoJson, jsonSnSTranscript);
+
+
     hideSpinner();
   }
 
-  function hideSpinner() {
-    $('#mainDiv').show();
-    $('#collapse-div').show();
-    document.getElementById("spinner").classList.add("d-none");
+  // hide spinner icon
+  function showSpinner() {
+    $('#main-div').hide();
+    $('#all-collapse-div').hide();
+    $("#spinner").addClass("d-block");
   }
 
-  function populate(snsVideoJson, jsonSnSTranscript) {
-    let video_id_ts_list = jsonSnSTranscript["video_id_ts_list"]
-    let keys = Object.keys(jsonSnSTranscript);
+  // hide spinner icon
+  function hideSpinner() {
+    $("#main-div").fadeIn(fadeInTime);
+    $("#all-collapse-div").fadeIn(fadeInTime);
+    $("#spinner").addClass("d-none");
+  }
+
+  function populate(snsVideoJson, jsonSnSTranscript, searchText = []) {
+    $("#all-collapse-div")[0].innerHTML = "";
+    let video_id_ts_list = []
+    if (searchText.length != 0) {
+      video_id_ts_list = searchText;
+    } else {
+      video_id_ts_list = jsonSnSTranscript["video_id_ts_list"];
+    }
+
     let counter = video_id_ts_list.length;
     video_id_ts_list.forEach(element => {
       // collapsible div
@@ -228,7 +311,7 @@
       caButton.setAttribute("role", "button")
       caButton.setAttribute("aria-expanded", "false")
       caButton.setAttribute("aria-controls", element)
-      caButton.innerHTML = snsVideoJson[element]["title"] + " (" + snsVideoJson[element]["videoPublishedAt"].substr(0, 10) + " | ~" + jsonSnSTranscript[element]["duration"] +  " min.) - #" + counter.toString();
+      caButton.innerHTML = snsVideoJson[element]["title"] + " (" + snsVideoJson[element]["videoPublishedAt"].substr(0, 10) + " | ~" + jsonSnSTranscript[element]["duration"] + " min.) - #" + counter.toString();
       collapseBtnDiv.appendChild(caButton);
       counter -= 1;
 
@@ -295,74 +378,128 @@
       collapseDiv.appendChild(clickBtnsDiv)
       collapseDiv.appendChild(contentDiv)
 
-      document.body.appendChild(collapseDiv)
+      document.getElementById("all-collapse-div").appendChild(collapseDiv)
 
-      document.getElementById(modifyButtonId).onclick = modifyCheck;
-      document.getElementById(saveButtonId).onclick = showCuratorModal;
-      document.getElementById("curator-modal-ok-btn").onclick = save;
-      document.getElementById("openAllBtn").onclick = openAll;
-      document.getElementById("closeAllBtn").onclick = closeAll;
-      document.getElementById("pwdModalOkBtn").onclick = pwdCheck;
+
+      $("#" + modifyButtonId).on("click", pwdCheck);
+      $("#" + saveButtonId).on("click", showCuratorModal);
+
+      //document.getElementById(modifyButtonId).onclick = modifyCheck;
+      //document.getElementById(saveButtonId).onclick = showCuratorModal;
+
     })
   }
 
-  function fillCurationBtn(element, text, status){
-    if (status=="NC"){
+  // reload page and clear search box
+  async function reload() {
+    if (this.id == "restore-button") {
+      let allOpenedDivs = document.querySelectorAll(".editable");
+      if (allOpenedDivs.length != 0) {
+        $("#warning-modal").modal("show");
+      } else {
+        $("#search-input").val("");
+        $("#curator-input").val("");
+        await populate(snsVideoJson, jsonSnSTranscript);
+      }
+    } else {
+      $("#search-input").val("");
+      $("#curator-input").val("");
+      await populate(snsVideoJson, jsonSnSTranscript);
+    }
+  }
+
+  
+  function getIndicesOf(searchStr, str, caseSensitive) {
+    var searchStrLen = searchStr.length;
+    if (searchStrLen == 0) {
+        return [];
+    }
+    var startIndex = 0, index, indices = [];
+    if (!caseSensitive) {
+        str = str.toLowerCase();
+        searchStr = searchStr.toLowerCase();
+    }
+    while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+        indices.push(index);
+        startIndex = index + searchStrLen;
+    }
+    return indices;
+}
+
+
+  // search input text in content
+  function search() {
+    let searchText = $("#search-input").val();
+    let searchTsList = [];
+    let video_id_ts_list = jsonSnSTranscript["video_id_ts_list"]
+    let counter = 0;
+    video_id_ts_list.forEach(element => {
+      let crrText = jsonSnSTranscript[element]["text"];
+      let crrTitle = snsVideoJson[element]["title"];
+      if (crrText.toLowerCase().includes(searchText.toLowerCase()) || crrTitle.toLowerCase().includes(searchText.toLowerCase())) {
+        searchTsList.push(element);
+      }
+    });
+    if (searchTsList.length == 0) {
+      $("#search-warning-message")[0].innerHTML = "Nessun video trovato con la chiave di ricerca data.";
+      $("#search-warning-modal").modal("show");
+      populate(snsVideoJson, jsonSnSTranscript);
+
+    } else {
+      populate(snsVideoJson, jsonSnSTranscript, searchText = searchTsList);
+    }
+  }
+
+  // fill content of curation buttons
+  function fillCurationBtn(element, text, status) {
+    if (status == "NC") {
       element.classList.remove("bg-success");
 
-    element.classList.add("bg-secondary");
+      element.classList.add("bg-secondary");
 
-  } else {
-    element.classList.remove("bg-secondary");
+    } else {
+      element.classList.remove("bg-secondary");
 
-    element.classList.add("bg-success");
-  }
+      element.classList.add("bg-success");
+    }
     element.setAttribute("title", text);
     element.innerHTML = status;
   }
+
+  // check password
   async function pwdCheck() {
-    //let names = document.getElementById('curator-input-text').value;
     let pwd = document.getElementById('pwd-input-text').value;
-    // request to endpoint
     const request = new Request(checkUrl, {
       headers: {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify({ "pwd": pwd }),
+      body: JSON.stringify({ "pwd": pwd, "sessionId": sessionId }),
     });
-
     // read response
     const checkResponse = await fetch(request);
     const checkResponseJson = await checkResponse.json();
 
-    // if success
-    if (checkResponseJson["responseStatus"] == "ok") {
-      localStorage.setItem('pwd', "ok"); // save password to tab
-      $('#pwd-modal').modal('hide'); // hide password insertion modal
-      // activate corresponding "Salva" button
-      enableModifyContentDiv(lastClickedModifyId);
-    } else {
-      $('#pwd-modal').modal('hide');
-      $('#error-modal').modal('show');
-      $('#error-message')[0].innerHTML = "Password errata o assente!";
-    }
-  }
-
-  // check whether the text panel can be made editable for modifications
-  function modifyCheck() {
-    if (localStorage.getItem('pwd') == "ok") {
-      enableModifyContentDiv(this.id);
-    } else {
+    //let names = document.getElementById('curator-input-text').value;
+    if (this.id.substring(0, 4) == "mod_") {
       lastClickedModifyId = this.id;
-      $('#pwd-modal').modal('show');
+      if (checkResponseJson["responseStatus"] == "ok") {
+        enableModifyContentDiv(lastClickedModifyId);
+        return
+      } else {
+        $('#pwd-modal').modal('show');
+      }
+    } else { // request comes from password modal
+      if (checkResponseJson["responseStatus"] == "ok") {
+        $('#pwd-modal').modal('hide'); // hide password insertion modal
+        // activate corresponding "Salva" button
+        enableModifyContentDiv(lastClickedModifyId);
+      } else {
+        $('#pwd-modal').modal('hide');
+        $('#error-modal').modal('show');
+        $('#error-message')[0].innerHTML = "Password errata o assente!";
+      }
     }
-  }
-
-  // enable save button
-  function enableSaveButton(currentElId) {
-    let key = extractElementId(id);
-    $("#save_" + id).attr("disabled", false);
   }
 
   // enable text div for modification
@@ -371,7 +508,6 @@
     let textDivId = "#txt_" + key;
     let contentDivId = "#" + key;
     let currentSaveBtnId = "#save_" + key;
-
     $(contentDivId).addClass("show");
     $(textDivId).css({ "background-color": "white", "color": "black" });
     $(textDivId).attr("contenteditable", true);
@@ -395,6 +531,7 @@
     } else {
       let key = extractElementId(currentSaveBtnId);
       let textDivId = "#txt_" + key;
+      $("#save_" + key).attr("disabled", true);
       $(textDivId).attr("style", modifyColorStyle);
       $(textDivId).attr("contenteditable", false);
       $(textDivId).removeClass("editable");
@@ -411,15 +548,17 @@
 
       const checkResponse = await fetch(request);
       const checkResponseJson = await checkResponse.json();
+
       $("#curator-modal").modal('hide');
       $('#success-modal').modal('show');
+      setTimeout(() => $('#success-modal').modal('hide'), 2200);
 
     }
   }
   // open all text panels
-  function openAll() {
+  async function openAll() {
     let allDivs = document.querySelectorAll(".my-collapse-div");
-    allDivs.forEach(item => { item.classList.add("show") })
+    allDivs.forEach(item => { item.classList.add("show") });
   }
 
   // close all text panels
@@ -432,8 +571,7 @@
   function showCurationInfo() {
     document.getElementById("info-modal").innerHTML = this.title;
     let status = this.innerHTML;
-    console.log(status)
-    if (status == "C"){
+    if (status == "C") {
       $('#curation-info-modal-header').removeClass("bg-secondary text-light");
       $('#curation-info-modal-header').addClass("bg-success text-light");
 
@@ -447,6 +585,7 @@
       $('#curation-info-modal-header').removeClass("border-success");
     }
     $('#curation-info-modal').modal('show');
+    setTimeout(() => $('#curation-info-modal').modal('hide'), 2200);
   }
 
   // extract main element id
