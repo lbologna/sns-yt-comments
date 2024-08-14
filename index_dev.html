@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+  <title>SNS YT comments</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+</head>
+
+<body id="banner" onload="execute()">
+
+
+
+  <!-- video text modal -->
+  <div class="modal  fade" id="text-modal" tabindex="-1" aria-labelledby="txtModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-fullscreen modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-6" id="txtModalLabel"></h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        <div id="text-modal-body"></div>
+          <!-- Footer with buttons -->
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- Tab content -->
+  <div id="exTab1" class="">
+    <div id="" class="sticky-top container" style="margin-top:2px">
+      <ul class=" nav nav-pills nav-fill gap-2 p-1 small bg-primary rounded-5 shadow-sm" id="pillNav2" role="tablist"
+        style="--bs-nav-link-color: var(--bs-white); --bs-nav-pills-link-active-color: var(--bs-primary); --bs-nav-pills-link-active-bg: var(--bs-white);">
+        <li class="nav-item" role="presentation">
+          <button href="#1a" class="nav-link active rounded-5" id="home-tab2" data-bs-toggle="tab" type="button"
+            role="tab" aria-selected="true">SnS</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button href="#2a" class="nav-link rounded-5" id="profile-tab2" data-bs-toggle="tab" type="button" role="tab"
+            aria-selected="false">Siate Curiosi</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button href="#3a" class="nav-link rounded-5" id="contact-tab2" data-bs-toggle="tab" type="button" role="tab"
+            aria-selected="false">PG Eng</button>
+        </li>
+      </ul>
+      <div class="container mt-2 mb-2 bg-white">
+        <div class="row">
+          <button class=" btn btn-sm btn-outline-success col-1 border-2 rounded-pill" onclick='window.scrollTo(0, 0)'><i
+            class='bi bi-arrow-up'></i></button>
+      <button id="updateBtn" onclick="execute()" class="btn btn-sm btn-outline-success col-10 border-2 rounded-pill"
+        type="button" class="container rounded-4 btn">
+        Aggiorna
+      </button>
+      <button class=" btn btn-sm btn-outline-success col-1 border-2 rounded-pill" onclick='window.scrollTo(0, document.body.scrollHeight)'><i
+        class='bi bi-arrow-down'></i></button>
+    </div>
+  </div>
+    </div>
+    <div id="tab-container" class=" container ">
+      <div class="row tab-content clearfix">
+        <div class="tab-pane active" id="1a">
+        </div>
+        <div class="tab-pane" id="2a">
+        </div>
+        <div class="tab-pane" id="3a">
+        </div>
+      </div>
+    </div>
+
+  </div>
+  </div>
+</body>
+
+<script>
+  if (window.location.href.includes("https://lbologna.github.io")) {
+    mainurl = "https://lucaleonardobologna.it"
+  } else if (window.location.href.includes("http://127.0.0.1:")) {
+    mainurl = "http://127.0.0.1:5000";
+  }
+  let singleVideoTextUrl = mainurl + "/snssingletranscript/";
+  let snsVideoInfo;
+  let snsVideoJson;
+
+  // show video text when present, through modal
+  async function showText() {
+    let text = await fetch(singleVideoTextUrl + "?key=" + this.id.substring(4))
+    let textJson = await text.json();
+    snsVideoInfo = await fetch(mainurl + "/getsnsjson/");
+    snsVideoJson = await snsVideoInfo.json();
+    $("#text-modal-body")[0].innerHTML = textJson["txt"];
+    let videoEl = snsVideoJson[this.id.substring(4)];
+    let videoPubTime = videoEl["videoPublishedAt"].substring(0,10);
+    $("#txtModalLabel")[0].innerHTML = "Video: " + videoEl["title"] + " - (" + videoPubTime + ")";
+
+    $("#text-modal").modal("show");
+  }
+
+
+
+  // Make sure the client is loaded before calling this method.
+  async function execute() {
+    document.getElementById("1a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
+    document.getElementById("2a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
+    document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
+
+
+    fetchResSNS = await fetch(mainurl + "/snscommentsfull/");
+    jsonDataSNS = await fetchResSNS.json();
+    populate(jsonDataSNS, "1a");
+
+    const fetchResSC = await fetch(mainurl + "/sccommentsfull/");
+    const jsonDataSC = await fetchResSC.json();
+    populate(jsonDataSC, "2a");
+
+    const fetchResPGENG = await fetch(mainurl + "/pgengcommentsfull/");
+    const jsonDataPGENG = await fetchResPGENG.json();
+    populate(jsonDataPGENG, "3a");
+  }
+
+
+  function populate(res, divId) {
+    let mainSnSdiv = document.getElementById(divId);
+    mainSnSdiv.innerHTML = "";
+    mainSnSdiv.scrollTop = 0;
+
+    // Handle the results here (response.result has the parsed body).
+    res["items"].forEach(element => {
+      /* container div */
+      let cdiv = document.createElement("div");
+      cdiv.classList.add("container", "border");
+      cdiv.setAttribute("style", "padding-top:4px; padding-bottom:4px")
+
+      /* author-time row" */
+      let authorTimeRow = document.createElement("div");
+      authorTimeRow.classList.add("row");
+      /* author div */
+      let authorDiv = document.createElement("div");
+      authorDiv.classList.add("col-8", "text-wrap", "text-break")
+      authorDiv.setAttribute("style", "font-size:14px")
+      let author = element["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"];
+      let authorImage = element["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"];
+
+      authorDiv.innerHTML = "<img width=22px src='" + authorImage + "''> <strong>" + author + "</strong>";
+      /* time div */
+      let timeDiv = document.createElement("div");
+      timeDiv.classList.add("col-4")
+      timeDiv.setAttribute("style", "font-size:13px")
+      let creationDateString = element["snippet"]["topLevelComment"]["snippet"]["updatedAt"];
+      let currentTime = new Date();
+      let creationDate = new Date(creationDateString);
+      let timeToDisplay = timeText(currentTime, creationDate);
+      timeDiv.innerHTML = timeToDisplay;
+      /* */
+      authorTimeRow.appendChild(authorDiv)
+      authorTimeRow.appendChild(timeDiv)
+      cdiv.appendChild(authorTimeRow)
+
+      /* comment row */
+      let commentRow = document.createElement("div");
+      commentRow.classList.add("row");
+      commentRow.setAttribute("style", "margin-top:8px; margin-bottom:12px;")
+      let commentDiv = document.createElement("div");
+      commentDiv.classList.add("col-12", "text-wrap", "text-break");
+      let comment = element["snippet"]["topLevelComment"]["snippet"]["textOriginal"];
+      commentDiv.innerHTML = comment + "<br>";
+      commentRow.appendChild(commentDiv)
+      cdiv.appendChild(commentRow)
+
+      /* footer row */
+      let footerRow = document.createElement("div");
+      footerRow.classList.add("row");
+      footerRow.setAttribute("style", "font-size:13px; background-color: #f1f1f1; padding-bottom:7px; padding-top:7px")
+      let footerDiv = document.createElement("div");
+      footerDiv.classList.add("col-12", "text-wrap", "text-break");
+      let videoID = element["snippet"]["topLevelComment"]["snippet"]["videoId"];
+      let videoTitle = element["videoTitle"]
+      let videoPublishedAt = new Date(element["videoPublishedAt"])
+      let timeVideoPublished = timeText(currentTime, videoPublishedAt);
+      let linkToAppPre = "intent://m.youtube.com/watch?v=";
+      let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
+      let linkToApp = linkToAppPre + videoID + linkToAppPost;
+      let replies = element["snippet"]["totalReplyCount"];
+
+      let videoDetailsDiv = document.createElement("div");
+      videoDetailsDiv.classList.add("col-12")
+      let answersDiv = document.createElement("div");
+      answersDiv.classList.add("col-3")
+      answersDiv.setAttribute("style", "margin-top: var(--bs-gutter-y)");
+      let appDiv = document.createElement("div");
+      appDiv.classList.add("col-3")
+      let urlDiv = document.createElement("div");
+      urlDiv.classList.add("col-3")
+
+      //let arrowDiv = document.createElement("div");
+      //arrowDiv.classList.add("col-2")
+
+      videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
+      answersDiv.innerHTML = "<div class='mt-1'><strong>Risposte: " + replies + "</strong></div>";
+
+      appDiv.innerHTML = "<a href='" + linkToApp + "'><button class='btn btn-sm'><i class='bi bi-youtube'></i> App</button></a>"
+      urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><button class='btn btn-sm'><i class='bi bi-youtube'></i> Url</button></a>";
+      //arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
+
+      footerRow.appendChild(videoDetailsDiv)
+      footerRow.appendChild(answersDiv)
+      footerRow.appendChild(appDiv)
+      footerRow.appendChild(urlDiv)
+
+      // in sns panel
+      if (divId == "1a") {
+        let buttonDiv = document.createElement("button");
+        buttonDiv.classList.add("col-3", "btn", "btn-sm", "btn-link");
+        buttonDiv.setAttribute("id", "txt_" + videoID);
+        buttonDiv.addEventListener("click", showText);
+
+        buttonDiv.innerHTML = '<i class="bi bi-file-text"></i>txt';
+        footerRow.appendChild(buttonDiv);
+      }
+
+      cdiv.appendChild(footerRow)
+
+      let titleContentDiv = document.createElement("div");
+      titleContentDiv.classList.add("col-12");
+
+      cdiv.scrollTop = 0;
+      mainSnSdiv.appendChild(cdiv);
+    });
+  }
+
+
+  /* ------------ */
+
+
+  function timeText(currentTime, creationDate) {
+    // To calculate the time difference of two dates
+    var DifferenceInTime = currentTime.getTime() - creationDate.getTime();
+
+    // To calculate the no. of days between two dates
+    let diffDays = DifferenceInTime / (1000 * 3600 * 24);
+    let diffHours = diffDays * 24;
+    let diffMinutes = diffHours * 60;
+    let diffYears = diffDays / 365;
+    let diffMonths = diffDays / 30;
+    let timeToDisplay = "";
+    if (diffYears > 1) {
+      let displayTime = Math.floor(diffYears);
+      if (displayTime == 1)
+        text = " anno fa"
+      else
+        text = " anni fa"
+      timeToDisplay = displayTime + text
+    }
+    else if (diffMonths > 1) {
+      let displayTime = Math.floor(diffMonths);
+      if (displayTime == 1)
+        text = " mese fa"
+      else
+        text = " mesi fa"
+      timeToDisplay = displayTime + text
+    }
+    else if (diffDays > 1) {
+      let displayTime = Math.floor(diffDays);
+      if (displayTime == 1)
+        text = " giorno fa"
+      else
+        text = " giorni fa"
+      timeToDisplay = displayTime + text;
+    } else if (diffHours > 1) {
+      let displayTime = Math.floor(diffHours);
+      if (displayTime == 1)
+        text = " ora fa"
+      else
+        text = " ore fa"
+      timeToDisplay = displayTime + text;
+    } else {
+      let displayTime = Math.ceil(diffMinutes);
+      if (displayTime == 1)
+        text = " min fa"
+      else
+        text = " min fa"
+      timeToDisplay = displayTime + text;
+    }
+    timeToDisplay = timeToDisplay;
+    return timeToDisplay;
+  }
+</script>
+
+
+<script>    document.querySelectorAll('.nav-link').forEach(linkItem => {
+    linkItem.addEventListener('click', _ => {
+      window.scrollTo(0, 0)
+    })
+  })</script>
+
+</html>
