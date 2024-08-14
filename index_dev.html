@@ -213,30 +213,22 @@
       appDiv.classList.add("col-3")
       appDiv.classList.add("btn","btn-sm","btn-link")
       appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
-      appDiv.innerHTML = "yt-url";
+      appDiv.innerHTML = '<i class="bi bi-collection-play-fill"></i>';
       appDiv.classList.add("col-3")
 
       let urlDiv = document.createElement("button");
       urlDiv.classList.add("btn","btn-sm","btn-link")
       urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
-      urlDiv.innerHTML = "yt-url";
+      urlDiv.innerHTML = '<i class="bi bi-globe"></i>';
       urlDiv.classList.add("col-3")
-
-      //let arrowDiv = document.createElement("div");
-      //arrowDiv.classList.add("col-2")
 
       videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
       answersDiv.innerHTML = "<div class='mt-1'><strong>Risposte: " + replies + "</strong></div>";
-      
-      //appDiv.innerHTML = "<button class='btn btn-link btn-sm' onclick=window.open('" + linkForApp + "')>yt-app</button>"
-      //appDiv.innerHTML = "<a href='" + linkToApp + "'><button class='btn btn-sm'>yt-app</button></a>"
-      //urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><button class='btn btn-sm'>yt-url</button></a>";
-      //arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
 
-      footerRow.appendChild(videoDetailsDiv)
-      footerRow.appendChild(answersDiv)
-      footerRow.appendChild(appDiv)
-      footerRow.appendChild(urlDiv)
+      footerRow.appendChild(videoDetailsDiv);
+      footerRow.appendChild(answersDiv);
+      footerRow.appendChild(appDiv);
+      footerRow.appendChild(urlDiv);
 
       // in sns panel
       if (divId == "1a") {
