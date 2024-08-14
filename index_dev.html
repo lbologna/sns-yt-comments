@@ -65,13 +65,13 @@
       </ul>
       <div class="container mt-2 mb-2 bg-white">
         <div class="row">
-          <button class=" btn btn-sm btn-outline-success col-1 border-2 rounded-pill" onclick='window.scrollTo(0, 0)'><i
+          <button class=" btn btn-sm btn-outline-success col-2 border-2 rounded-pill" onclick='window.scrollTo(0, 0)'><i
             class='bi bi-arrow-up'></i></button>
-      <button id="updateBtn" onclick="execute()" class="btn btn-sm btn-outline-success col-10 border-2 rounded-pill"
+      <button id="updateBtn" onclick="execute()" class="btn btn-sm btn-outline-success col-8 border-2 rounded-pill"
         type="button" class="container rounded-4 btn">
         Aggiorna
       </button>
-      <button class=" btn btn-sm btn-outline-success col-1 border-2 rounded-pill" onclick='window.scrollTo(0, document.body.scrollHeight)'><i
+      <button class=" btn btn-sm btn-outline-success col-2 border-2 rounded-pill" onclick='window.scrollTo(0, document.body.scrollHeight)'><i
         class='bi bi-arrow-down'></i></button>
     </div>
   </div>
@@ -200,15 +200,26 @@
       let linkToAppPost = "&feature=mweb_c3_open_app&itc_campaign=mweb_c3_open_app&redirect_app_store_ios=1&app=desktop#Intent;package=com.google.android.youtube;scheme=vnd.youtube;launchFlags=268435456;end"
       let linkToApp = linkToAppPre + videoID + linkToAppPost;
       let replies = element["snippet"]["totalReplyCount"];
+      let linkForApp = "window.open('" + linkToApp + "')";
+      let linkForPage = 'https://www.youtube.com/watch?v=' + videoID;
 
       let videoDetailsDiv = document.createElement("div");
       videoDetailsDiv.classList.add("col-12")
       let answersDiv = document.createElement("div");
-      answersDiv.classList.add("col-3")
+      answersDiv.classList.add("col-4")
       answersDiv.setAttribute("style", "margin-top: var(--bs-gutter-y)");
-      let appDiv = document.createElement("div");
+      let appDiv = document.createElement("button");
+      appDiv.classList.add("btn","btn-sm","btn-link")
       appDiv.classList.add("col-3")
-      let urlDiv = document.createElement("div");
+      appDiv.classList.add("btn","btn-sm","btn-link")
+      appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
+      appDiv.innerHTML = "yt-url";
+      appDiv.classList.add("col-3")
+
+      let urlDiv = document.createElement("button");
+      urlDiv.classList.add("btn","btn-sm","btn-link")
+      urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
+      urlDiv.innerHTML = "yt-url";
       urlDiv.classList.add("col-3")
 
       //let arrowDiv = document.createElement("div");
@@ -216,9 +227,10 @@
 
       videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
       answersDiv.innerHTML = "<div class='mt-1'><strong>Risposte: " + replies + "</strong></div>";
-
-      appDiv.innerHTML = "<a href='" + linkToApp + "'><button class='btn btn-sm'><i class='bi bi-youtube'></i> App</button></a>"
-      urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><button class='btn btn-sm'><i class='bi bi-youtube'></i> Url</button></a>";
+      
+      //appDiv.innerHTML = "<button class='btn btn-link btn-sm' onclick=window.open('" + linkForApp + "')>yt-app</button>"
+      //appDiv.innerHTML = "<a href='" + linkToApp + "'><button class='btn btn-sm'>yt-app</button></a>"
+      //urlDiv.innerHTML = "<a href='https://www.youtube.com/watch?v=" + videoID + "' target=_blank><button class='btn btn-sm'>yt-url</button></a>";
       //arrowDiv.innerHTML = "<a href='#banner'><i class='bi bi-arrow-up'></i><a>"
 
       footerRow.appendChild(videoDetailsDiv)
@@ -229,11 +241,11 @@
       // in sns panel
       if (divId == "1a") {
         let buttonDiv = document.createElement("button");
-        buttonDiv.classList.add("col-3", "btn", "btn-sm", "btn-link");
+        buttonDiv.classList.add("col-2", "btn", "btn-sm", "btn-link");
         buttonDiv.setAttribute("id", "txt_" + videoID);
         buttonDiv.addEventListener("click", showText);
 
-        buttonDiv.innerHTML = '<i class="bi bi-file-text"></i>txt';
+        buttonDiv.innerHTML = '<i class="bi bi-file-text"></i>';
         footerRow.appendChild(buttonDiv);
       }
 
