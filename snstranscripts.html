@@ -177,17 +177,17 @@
   </div>
 
   <!-- create main div for button row -->
-  <div id="main-div" class="sticky-top m-2">
-    <div class="container sticky-top main-div bg-white">
+  <div id="main-div" class="sticky-top mt-2 mb-2 ml-0 mr-0">
+    <div class="container main-div bg-white">
       <div class="row justify-content-md-center">
         <button class="btn btn-sm btn-outline-dark rounded-pill col-2" onclick='window.location.reload();'><i
             class='bi bi-arrow-repeat'></i></button>
-        <button id="openAllBtn" class="btn btn-sm btn-outline-success rounded-pill col-4 ">Apri tutti</button>
-        <button id="closeAllBtn" class="btn btn-sm btn-outline-success rounded-pill  col-4">Chiudi
+        <button id="openAllBtn" class="btn btn-sm btn-outline-success rounded-pill col-3 p-0">Apri tutti</button>
+        <button id="closeAllBtn" class="btn btn-sm btn-outline-success rounded-pill p-0 col-3">Chiudi
           tutti</button>
-        <button class="btn btn-sm btn-outline-dark rounded-pill col-1" onclick='window.scrollTo(0, 0)'><i
+        <button class="btn btn-sm btn-outline-dark rounded-pill col-2" onclick='window.scrollTo(0, 0)'><i
             class='bi bi-arrow-up'></i></button>
-        <button class="btn btn-sm btn-outline-dark rounded-pill col-1"
+        <button class="btn btn-sm btn-outline-dark rounded-pill col-2"
           onclick='window.scrollTo(0, document.body.scrollHeight)'><i class='bi bi-arrow-down '></i></button>
       </div>
       <div class="input-group mt-2">
@@ -302,7 +302,7 @@
 
       // collapsible main button
       let caButton = document.createElement("a");
-      caButton.classList.add("btn", "btn-primary", "btn-block", "col-12")
+      
       caButton.setAttribute("id", "cbt_" + element);
       caButton.setAttribute("data-bs-toggle", "collapse")
       caButton.setAttribute("href", "#".concat(element))
@@ -310,6 +310,11 @@
       caButton.setAttribute("aria-expanded", "false")
       caButton.setAttribute("aria-controls", element)
       caButton.innerHTML = snsVideoJson[element]["title"] + " (" + snsVideoJson[element]["videoPublishedAt"].substr(0, 10) + " | ~" + jsonSnSTranscript[element]["duration"] + " min.) - #" + counter.toString();
+      if (jsonSnSTranscript[element]["text"].toLowerCase() == "nessuna trascrizione"){
+        caButton.classList.add("btn", "btn-secondary", "btn-block", "col-12")
+    } else {
+      caButton.classList.add("btn", "btn-primary", "btn-block", "col-12")
+    }
       collapseBtnDiv.appendChild(caButton);
       counter -= 1;
 
