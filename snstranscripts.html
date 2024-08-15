@@ -45,7 +45,7 @@
       <div class="modal-content">
         <div id="curation-info-modal-header" class="modal-header">
           <h6 id="info-modal" class="modal-title"></h6>
-          <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+          <button type="button" class="btn btn-close bg-light text-light" data-bs-dismiss="modal" aria-label="Chiudi"></button>
         </div>
       </div>
     </div>
@@ -255,8 +255,6 @@
     snsVideoJson = await snsVideoInfo.json();
 
     await populate(snsVideoJson, jsonSnSTranscript);
-
-
     hideSpinner();
   }
 
@@ -558,10 +556,16 @@
 
     }
   }
+
+  function sleep (time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
   // open all text panels
   async function openAll() {
+    showSpinner();
     let allDivs = document.querySelectorAll(".my-collapse-div");
-    allDivs.forEach(item => { item.classList.add("show") });
+    allDivs.forEach(item => { item.classList.add("show")});
+    hideSpinner();
   }
 
   // close all text panels
