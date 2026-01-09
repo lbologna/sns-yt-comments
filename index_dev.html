@@ -35,7 +35,6 @@
           <!-- Footer with buttons -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-
           </div>
         </div>
       </div>
@@ -43,6 +42,17 @@
   </div>
 
 
+  <!-- alert modal -->
+  <div class="modal auto-fade" id="alert-modal" tabindex="-1" aria-hidden="true" >
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-body bg-success text-white">
+        <div id="alert-modal-body"><h2>Link copiato</h2></div>
+          <!-- Footer with buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
 
 
   <!-- Tab content -->
@@ -86,11 +96,10 @@
         </div>
       </div>
     </div>
-
   </div>
   </div>
 </body>
-
+    
 <script>
   if (window.location.href.includes("https://lbologna.github.io")) {
     mainurl = "https://lucaleonardobologna.it"
@@ -322,14 +331,19 @@
 
   function openPage(linkToOpen)
     {
-      navigator.clipboard.writeText(linkToOpen);
+      //navigator.clipboard.writeText(linkToOpen);
       window.open(linkToOpen,'_blank')
     }
 
     function copyToClip(urlToCopy)
     {
       navigator.clipboard.writeText(urlToCopy);
-      alert("Link copiato");
+      $("#alert-modal").modal("show");
+      setTimeout(() => {
+      console.log("this is the second message");
+      $("#alert-modal").modal("hide");
+      }, 1500);
+      
     }
 </script>
 
