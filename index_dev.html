@@ -208,19 +208,26 @@
       let answersDiv = document.createElement("div");
       answersDiv.classList.add("col-4")
       answersDiv.setAttribute("style", "margin-top: var(--bs-gutter-y)");
+
       let appDiv = document.createElement("button");
       appDiv.classList.add("btn","btn-sm","btn-link")
-      appDiv.classList.add("col-3")
+      appDiv.classList.add("col-2")
       appDiv.classList.add("btn","btn-sm","btn-link")
       appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
       appDiv.innerHTML = '<i class="bi bi-collection-play-fill"></i>';
-      appDiv.classList.add("col-3")
 
       let urlDiv = document.createElement("button");
       urlDiv.classList.add("btn","btn-sm","btn-link")
+      urlDiv.classList.add("col-2")
       urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
       urlDiv.innerHTML = '<i class="bi bi-globe"></i>';
-      urlDiv.classList.add("col-3")
+
+      let copyUrlDiv = document.createElement("button");
+      copyUrlDiv.setAttribute('id', linkForPage)
+      copyUrlDiv.classList.add("btn","btn-sm","btn-link");
+      copyUrlDiv.setAttribute("onclick", "copyToClip(this.id)");
+      copyUrlDiv.innerHTML = '<i class="bi bi-link-45deg"></i>';
+      copyUrlDiv.classList.add("col-2")
 
       videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
       answersDiv.innerHTML = "<div class='mt-1'><strong>Risposte: " + replies + "</strong></div>";
@@ -229,6 +236,8 @@
       footerRow.appendChild(answersDiv);
       footerRow.appendChild(appDiv);
       footerRow.appendChild(urlDiv);
+      footerRow.appendChild(copyUrlDiv);
+
 
       // in sns panel
       if (divId == "1a") {
@@ -237,7 +246,7 @@
         buttonDiv.setAttribute("id", "txt_" + videoID);
         buttonDiv.addEventListener("click", showText);
 
-        buttonDiv.innerHTML = '<i class="bi bi-file-text"></i>';
+        buttonDiv.innerHTML = '<i class="bi bi-file-text col-2"></i>';
         footerRow.appendChild(buttonDiv);
       }
 
@@ -307,6 +316,12 @@
     timeToDisplay = timeToDisplay;
     return timeToDisplay;
   }
+
+  function copyToClip(param)
+    {
+      console.log(param)
+      navigator.clipboard.writeText(param);
+    }
 </script>
 
 
