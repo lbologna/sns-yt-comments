@@ -213,13 +213,16 @@
       appDiv.classList.add("btn","btn-sm","btn-link")
       appDiv.classList.add("col-2")
       appDiv.classList.add("btn","btn-sm","btn-link")
-      appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
+      //appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
+      appDiv.setAttribute("onclick", "openPage('" + linkToApp + "')");
       appDiv.innerHTML = '<i class="bi bi-collection-play-fill"></i>';
 
       let urlDiv = document.createElement("button");
       urlDiv.classList.add("btn","btn-sm","btn-link")
       urlDiv.classList.add("col-2")
-      urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
+      //urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
+      urlDiv.setAttribute("onclick", "openPage('" + linkForPage + "')");
+
       urlDiv.innerHTML = '<i class="bi bi-globe"></i>';
 
       let copyUrlDiv = document.createElement("button");
@@ -317,10 +320,10 @@
     return timeToDisplay;
   }
 
-  function copyToClip(param)
+  function openPage(linkToOpen)
     {
-      console.log(param)
-      navigator.clipboard.writeText(param);
+      navigator.clipboard.writeText(linkToOpen);
+      window.open(linkToOpen,'_blank')
     }
 </script>
 
