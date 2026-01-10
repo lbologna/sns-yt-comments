@@ -35,7 +35,6 @@
           <!-- Footer with buttons -->
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-
           </div>
         </div>
       </div>
@@ -43,7 +42,17 @@
   </div>
 
 
-
+  <!-- alert modal -->
+  <div class="modal fade" id="alert-modal" tabindex="-1" aria-hidden="true" >
+    <div class="modal-dialog ">
+      <div class="modal-content">
+        <div class="modal-body bg-success text-white">
+        <div id="alert-modal-body"><h2>Link copiato</h2></div>
+          <!-- Footer with buttons -->
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Tab content -->
   <div id="exTab1" class="">
@@ -86,11 +95,10 @@
         </div>
       </div>
     </div>
-
   </div>
   </div>
 </body>
-
+    
 <script>
   if (window.location.href.includes("https://lbologna.github.io")) {
     mainurl = "https://lucaleonardobologna.it"
@@ -208,19 +216,29 @@
       let answersDiv = document.createElement("div");
       answersDiv.classList.add("col-4")
       answersDiv.setAttribute("style", "margin-top: var(--bs-gutter-y)");
+
       let appDiv = document.createElement("button");
       appDiv.classList.add("btn","btn-sm","btn-link")
-      appDiv.classList.add("col-3")
+      appDiv.classList.add("col-2")
       appDiv.classList.add("btn","btn-sm","btn-link")
-      appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
+      //appDiv.setAttribute("onclick", "window.open('" + linkToApp + "','_blank')");
+      appDiv.setAttribute("onclick", "openPage('" + linkToApp + "')");
       appDiv.innerHTML = '<i class="bi bi-collection-play-fill"></i>';
-      appDiv.classList.add("col-3")
 
       let urlDiv = document.createElement("button");
       urlDiv.classList.add("btn","btn-sm","btn-link")
-      urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
+      urlDiv.classList.add("col-2")
+      //urlDiv.setAttribute("onclick", "window.open('" + linkForPage + "','_blank')");
+      urlDiv.setAttribute("onclick", "openPage('" + linkForPage + "')");
+
       urlDiv.innerHTML = '<i class="bi bi-globe"></i>';
-      urlDiv.classList.add("col-3")
+
+      let copyUrlDiv = document.createElement("button");
+      copyUrlDiv.setAttribute('id', linkForPage)
+      copyUrlDiv.classList.add("btn","btn-sm","btn-link");
+      copyUrlDiv.setAttribute("onclick", "copyToClip(this.id)");
+      copyUrlDiv.innerHTML = '<i class="bi bi-link-45deg"></i>';
+      copyUrlDiv.classList.add("col-2")
 
       videoDetailsDiv.innerHTML = "<strong>" + videoTitle + "</strong>" + " - " + timeVideoPublished;
       answersDiv.innerHTML = "<div class='mt-1'><strong>Risposte: " + replies + "</strong></div>";
@@ -229,6 +247,8 @@
       footerRow.appendChild(answersDiv);
       footerRow.appendChild(appDiv);
       footerRow.appendChild(urlDiv);
+      footerRow.appendChild(copyUrlDiv);
+
 
       // in sns panel
       if (divId == "1a") {
@@ -237,7 +257,7 @@
         buttonDiv.setAttribute("id", "txt_" + videoID);
         buttonDiv.addEventListener("click", showText);
 
-        buttonDiv.innerHTML = '<i class="bi bi-file-text"></i>';
+        buttonDiv.innerHTML = '<i class="bi bi-file-text col-2"></i>';
         footerRow.appendChild(buttonDiv);
       }
 
@@ -307,6 +327,24 @@
     timeToDisplay = timeToDisplay;
     return timeToDisplay;
   }
+
+  function openPage(linkToOpen)
+    {
+      //navigator.clipboard.writeText(linkToOpen);
+      window.open(linkToOpen,'_blank')
+    }
+
+    function copyToClip(urlToCopy)
+    {
+      navigator.clipboard.writeText(urlToCopy);
+      $('#alert-modal').delay(1800).fadeOut(500);
+      $("#alert-modal").modal("show");
+      setTimeout(() => {
+      console.log("this is the second message");
+      $("#alert-modal").modal("hide");
+      }, 2000);
+      
+    }
 </script>
 
 
