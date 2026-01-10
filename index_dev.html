@@ -43,7 +43,7 @@
 
 
   <!-- alert modal -->
-  <div class="modal auto-fade" id="alert-modal" tabindex="-1" aria-hidden="true" >
+  <div class="modal fade" id="alert-modal" tabindex="-1" aria-hidden="true" >
     <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-body bg-success text-white">
@@ -53,7 +53,6 @@
       </div>
     </div>
   </div>
-
 
   <!-- Tab content -->
   <div id="exTab1" class="">
@@ -338,11 +337,12 @@
     function copyToClip(urlToCopy)
     {
       navigator.clipboard.writeText(urlToCopy);
+      $('#alert-modal').delay(1800).fadeOut(500);
       $("#alert-modal").modal("show");
       setTimeout(() => {
       console.log("this is the second message");
       $("#alert-modal").modal("hide");
-      }, 1500);
+      }, 2000);
       
     }
 </script>
