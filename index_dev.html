@@ -8,7 +8,6 @@
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
-
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
     integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
     crossorigin="anonymous"></script>
@@ -132,19 +131,49 @@
     document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
 
 
+    const fetchResSNS = fetch(mainurl + "/snscommentsfull/");
+
+    fetchResSNS
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "1a");
+    });
+
+/*
     fetchResSNS = await fetch(mainurl + "/snscommentsfull/");
     jsonDataSNS = await fetchResSNS.json();
     populate(jsonDataSNS, "1a");
+*/
 
+
+    const fetchResSC = fetch(mainurl + "/sccommentsfull/");
+
+    fetchResSC
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "2a");
+    });
+
+  /*
     const fetchResSC = await fetch(mainurl + "/sccommentsfull/");
     const jsonDataSC = await fetchResSC.json();
     populate(jsonDataSC, "2a");
+  */
+    const fetchResPGENG = fetch(mainurl + "/pgengcommentsfull/");
 
+    fetchResPGENG
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "3a");
+    });
+/*
     const fetchResPGENG = await fetch(mainurl + "/pgengcommentsfull/");
     const jsonDataPGENG = await fetchResPGENG.json();
     populate(jsonDataPGENG, "3a");
-  }
 
+*/
+  }
+  
 
   function populate(res, divId) {
     let mainSnSdiv = document.getElementById(divId);
