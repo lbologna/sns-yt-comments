@@ -131,19 +131,49 @@
     document.getElementById("3a").innerHTML = '<br><br><div class="text-center"><div class="spinner-border" role="status"></div></div> '
 
 
+    const fetchResSNS = fetch(mainurl + "/snscommentsfull/");
+
+    fetchResSNS
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "1a");
+    });
+
+/*
     fetchResSNS = await fetch(mainurl + "/snscommentsfull/");
     jsonDataSNS = await fetchResSNS.json();
     populate(jsonDataSNS, "1a");
+*/
 
+
+    const fetchResSC = fetch(mainurl + "/sccommentsfull/");
+
+    fetchResSC
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "2a");
+    });
+
+  /*
     const fetchResSC = await fetch(mainurl + "/sccommentsfull/");
     const jsonDataSC = await fetchResSC.json();
     populate(jsonDataSC, "2a");
+  */
+    const fetchResPGENG = fetch(mainurl + "/pgengcommentsfull/");
 
+    fetchResPGENG
+      .then((response) => response.json())
+      .then((data) => {
+        populate(data, "3a");
+    });
+/*
     const fetchResPGENG = await fetch(mainurl + "/pgengcommentsfull/");
     const jsonDataPGENG = await fetchResPGENG.json();
     populate(jsonDataPGENG, "3a");
-  }
 
+*/
+  }
+  
 
   function populate(res, divId) {
     let mainSnSdiv = document.getElementById(divId);
