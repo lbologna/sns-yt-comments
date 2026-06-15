@@ -374,6 +374,31 @@
       }, 2000);
       
     }
+
+
+    const button = document.getElementById('updateBtn');
+
+button.addEventListener('click', () => {
+  const duration = 1 * 60 * 1000; // 7 minutes in ms
+  const enableAt = Date.now() + duration;
+
+  button.disabled = true;
+
+  const interval = setInterval(() => {
+    const remaining = Math.ceil((enableAt - Date.now()) / 1000);
+
+    if (remaining <= 0) {
+      clearInterval(interval);
+      button.disabled = false;
+      button.textContent = 'Aggiorna';
+    } else {
+      const m = Math.floor(remaining / 60);
+      const s = remaining % 60;
+      button.textContent = `Wait ${m}:${s.toString().padStart(2, '0')}`;
+    }
+  }, 1000);
+});
+
 </script>
 
 
